@@ -1,8 +1,16 @@
 package org.task_1;
 
-public class HeapSort { // класс сортировки двоичной кучи
-
-    public int[] initHeap(int[] array, int length) { // инициаизация двоичной кучи
+/**
+ * Класс для реализации пирамидальной сортировки
+ */
+public class HeapSort {
+    /**
+     * инициализация двоичной кучи
+     * 
+     * @param array  массив чисел для сортировки
+     * @param length длина массива
+     */
+    public int[] initHeap(int[] array, int length) {
 
         for (int currentElem = length / 2 - 1; currentElem >= 0; currentElem--) {
             swiftDown(array, length, currentElem);
@@ -10,13 +18,27 @@ public class HeapSort { // класс сортировки двоичной ку
         return array;
     }
 
-    public void swap(int[] array, int largeElem, int tree) {  // изменение порядка элементов в куче
+    /**
+     * Метод для перемещения местами двух элементов массива
+     * 
+     * @param array     массив чисел
+     * @param largeElem индекс числа для перемещения
+     * @param tree      индекса числа для перемещения
+     */
+    public void swap(int[] array, int largeElem, int tree) {
         int temp = array[largeElem];
         array[largeElem] = array[tree];
         array[tree] = temp;
     }
 
-    public int[] swiftDown(int[] array, int length, int currentElem) { // просеивание кучи вниз 
+    /**
+     * Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс
+     * 
+     * @param array       массив чисел
+     * @param length      длина массива
+     * @param currentElem текущий корень двоичной кучи
+     */
+    public int[] swiftDown(int[] array, int length, int currentElem) {
         int largeElem = currentElem;
         int leftTree = 2 * currentElem + 1;
         int rightTree = 2 * currentElem + 2;
@@ -29,16 +51,20 @@ public class HeapSort { // класс сортировки двоичной ку
             largeElem = rightTree;
         }
 
-        if (largeElem != currentElem){
+        if (largeElem != currentElem) {
             swap(array, currentElem, largeElem);
             swiftDown(array, length, largeElem);
         }
         return array;
     }
 
-    
+    /**
+     * Сортировка массива с помощью пирамидальной сортировки на двоичной куче
+     * 
+     * @param array массив чисел
+     */
 
-    public int[] heapSort(int[] array) { // пиромидальная сортировка, итоговая
+    public int[] heapSort(int[] array) {
         int length = array.length;
 
         int[] initArray = initHeap(array, length);
@@ -51,7 +77,12 @@ public class HeapSort { // класс сортировки двоичной ку
         return (initArray);
     }
 
-    public void printArray(int[] array) { // печать массива
+    /**
+     * Метод для печати массива чисел
+     * 
+     * @param array массив чисел
+     */
+    public void printArray(int[] array) {
         int length = array.length;
         for (int i = 0; i < length; i++) {
             System.out.print(array[i] + " ");
@@ -59,7 +90,12 @@ public class HeapSort { // класс сортировки двоичной ку
         System.out.println('\n');
     }
 
-    public static void main(String[] args) { // вызов сортировки 
+    /**
+     * Точка входа программы
+     * 
+     * @param args стандартные аргументы
+     */
+    public static void main(String[] args) {
         HeapSort heap = new HeapSort();
         heap.heapSort(new int[] { 4, 10, 3, 5, 1 });
     }
