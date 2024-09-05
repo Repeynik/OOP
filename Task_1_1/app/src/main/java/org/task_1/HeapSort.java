@@ -1,13 +1,11 @@
 package org.task_1;
 
-/**
- * Класс для реализации пирамидальной сортировки
- */
+/** Класс для реализации пирамидальной сортировки. */
 public class HeapSort {
     /**
-     * инициализация двоичной кучи
-     * 
-     * @param array  массив чисел для сортировки
+     * инициализация двоичной кучи.
+     *
+     * @param array массив чисел для сортировки
      * @param length длина массива
      */
     public int[] initHeap(int[] array, int length) {
@@ -19,11 +17,11 @@ public class HeapSort {
     }
 
     /**
-     * Метод для перемещения местами двух элементов массива
-     * 
-     * @param array     массив чисел
+     * Метод для перемещения местами двух элементов массива.
+     *
+     * @param array массив чисел
      * @param largeElem индекс числа для перемещения
-     * @param tree      индекса числа для перемещения
+     * @param tree индекса числа для перемещения
      */
     public void swap(int[] array, int largeElem, int tree) {
         int temp = array[largeElem];
@@ -32,10 +30,10 @@ public class HeapSort {
     }
 
     /**
-     * Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс
-     * 
-     * @param array       массив чисел
-     * @param length      длина массива
+     * Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс.
+     *
+     * @param array массив чисел
+     * @param length длина массива
      * @param currentElem текущий корень двоичной кучи
      */
     public int[] swiftDown(int[] array, int length, int currentElem) {
@@ -59,11 +57,10 @@ public class HeapSort {
     }
 
     /**
-     * Сортировка массива с помощью пирамидальной сортировки на двоичной куче
-     * 
+     * Сортировка массива с помощью пирамидальной сортировки на двоичной куче.
+     *
      * @param array массив чисел
      */
-
     public int[] heapSort(int[] array) {
         int length = array.length;
 
@@ -78,8 +75,8 @@ public class HeapSort {
     }
 
     /**
-     * Метод для печати массива чисел
-     * 
+     * Метод для печати массива чисел.
+     *
      * @param array массив чисел
      */
     public void printArray(int[] array) {
@@ -91,12 +88,12 @@ public class HeapSort {
     }
 
     /**
-     * Точка входа программы
-     * 
+     * Точка входа программы.
+     *
      * @param args стандартные аргументы
      */
     public static void main(String[] args) {
         HeapSort heap = new HeapSort();
-        heap.heapSort(new int[] { 4, 10, 3, 5, 1 });
+        heap.heapSort(new int[] {4, 10, 3, 5, 1});
     }
 }

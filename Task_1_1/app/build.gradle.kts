@@ -9,6 +9,7 @@ plugins {
     application
     java
     jacoco
+    id("com.diffplug.spotless") version "7.0.0.BETA2"
 }
 
 
@@ -53,4 +54,15 @@ tasks.jacocoTestReport {
 
 tasks.javadoc {
     destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+spotless {
+    java {
+        googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
+ // Use Google Java Format
+        // or you can use:
+        // format '*.java', {
+        //     target 'src/**/*.java'
+        // }
+    }
 }
