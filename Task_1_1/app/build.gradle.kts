@@ -40,17 +40,22 @@ application {
     mainClass = "org.task_1.HeapSort"
 }
 
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
-}
-
 
 tasks.jacocoTestReport {
+    val reportDir = file("../build/reports/jacoco/test")
+    reports.xml.outputLocation = reportDir.resolve("jacocoTestReport.xml")
     reports {
         xml.required = true
     }
+
 }
+
+tasks.named<Test>("test") {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
 
 tasks.javadoc {
     destinationDir = file("${buildDir}/docs/javadoc")
@@ -59,10 +64,5 @@ tasks.javadoc {
 spotless {
     java {
         googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
- // Use Google Java Format
-        // or you can use:
-        // format '*.java', {
-        //     target 'src/**/*.java'
-        // }
     }
 }
