@@ -54,11 +54,12 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+    finalizedBy(tasks.javadoc)
 }
 
 
 tasks.javadoc {
-    destinationDir = file("${buildDir}/docs/javadoc")
+    destinationDir = file("../build/docs/javadoc")
 }
 
 spotless {
