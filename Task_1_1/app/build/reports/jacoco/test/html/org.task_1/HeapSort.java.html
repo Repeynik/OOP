@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeapSort.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">org.task_1</a> &gt; <span class="el_source">HeapSort.java</span></div><h1>HeapSort.java</h1><pre class="source lang-java linenums">package org.task_1;
+
+/**
+ * РљР»Р°СЃСЃ РґР»СЏ СЂРµР°Р»РёР·Р°С†РёРё РїРёСЂР°РјРёРґР°Р»СЊРЅРѕР№ СЃРѕСЂС‚РёСЂРѕРІРєРё
+ */
+<span class="fc" id="L6">public class HeapSort {</span>
+    /**
+     * РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґРІРѕРёС‡РЅРѕР№ РєСѓС‡Рё
+     * 
+     * @param array  РјР°СЃСЃРёРІ С‡РёСЃРµР» РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
+     * @param length РґР»РёРЅР° РјР°СЃСЃРёРІР°
+     */
+    public int[] initHeap(int[] array, int length) {
+
+<span class="fc bfc" id="L15" title="All 2 branches covered.">        for (int currentElem = length / 2 - 1; currentElem &gt;= 0; currentElem--) {</span>
+<span class="fc" id="L16">            swiftDown(array, length, currentElem);</span>
+        }
+<span class="fc" id="L18">        return array;</span>
+    }
+
+    /**
+     * РњРµС‚РѕРґ РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ РјРµСЃС‚Р°РјРё РґРІСѓС… СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР°
+     * 
+     * @param array     РјР°СЃСЃРёРІ С‡РёСЃРµР»
+     * @param largeElem РёРЅРґРµРєСЃ С‡РёСЃР»Р° РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ
+     * @param tree      РёРЅРґРµРєСЃР° С‡РёСЃР»Р° РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ
+     */
+    public void swap(int[] array, int largeElem, int tree) {
+<span class="fc" id="L29">        int temp = array[largeElem];</span>
+<span class="fc" id="L30">        array[largeElem] = array[tree];</span>
+<span class="fc" id="L31">        array[tree] = temp;</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * РџСЂРѕСЃРµРёРІР°РЅРёРµ РєСѓС‡Рё РІРЅРёР·, РЅР°РёР±РѕР»СЊС€РёР№ СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР° СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅР° 0 РёРЅРґРµРєСЃ
+     * 
+     * @param array       РјР°СЃСЃРёРІ С‡РёСЃРµР»
+     * @param length      РґР»РёРЅР° РјР°СЃСЃРёРІР°
+     * @param currentElem С‚РµРєСѓС‰РёР№ РєРѕСЂРµРЅСЊ РґРІРѕРёС‡РЅРѕР№ РєСѓС‡Рё
+     */
+    public int[] swiftDown(int[] array, int length, int currentElem) {
+<span class="fc" id="L42">        int largeElem = currentElem;</span>
+<span class="fc" id="L43">        int leftTree = 2 * currentElem + 1;</span>
+<span class="fc" id="L44">        int rightTree = 2 * currentElem + 2;</span>
+
+<span class="fc bfc" id="L46" title="All 4 branches covered.">        if (leftTree &lt; length &amp;&amp; array[largeElem] &lt; array[leftTree]) {</span>
+<span class="fc" id="L47">            largeElem = leftTree;</span>
+        }
+
+<span class="fc bfc" id="L50" title="All 4 branches covered.">        if (rightTree &lt; length &amp;&amp; array[largeElem] &lt; array[rightTree]) {</span>
+<span class="fc" id="L51">            largeElem = rightTree;</span>
+        }
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (largeElem != currentElem) {</span>
+<span class="fc" id="L55">            swap(array, currentElem, largeElem);</span>
+<span class="fc" id="L56">            swiftDown(array, length, largeElem);</span>
+        }
+<span class="fc" id="L58">        return array;</span>
+    }
+
+    /**
+     * РЎРѕСЂС‚РёСЂРѕРІРєР° РјР°СЃСЃРёРІР° СЃ РїРѕРјРѕС‰СЊСЋ РїРёСЂР°РјРёРґР°Р»СЊРЅРѕР№ СЃРѕСЂС‚РёСЂРѕРІРєРё РЅР° РґРІРѕРёС‡РЅРѕР№ РєСѓС‡Рµ
+     * 
+     * @param array РјР°СЃСЃРёРІ С‡РёСЃРµР»
+     */
+
+    public int[] heapSort(int[] array) {
+<span class="fc" id="L68">        int length = array.length;</span>
+
+<span class="fc" id="L70">        int[] initArray = initHeap(array, length);</span>
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (int count = length - 1; count &gt;= 0; count--) {</span>
+<span class="fc" id="L73">            swap(initArray, 0, count);</span>
+<span class="fc" id="L74">            swiftDown(initArray, count, 0);</span>
+        }
+<span class="fc" id="L76">        printArray(initArray);</span>
+<span class="fc" id="L77">        return (initArray);</span>
+    }
+
+    /**
+     * РњРµС‚РѕРґ РґР»СЏ РїРµС‡Р°С‚Рё РјР°СЃСЃРёРІР° С‡РёСЃРµР»
+     * 
+     * @param array РјР°СЃСЃРёРІ С‡РёСЃРµР»
+     */
+    public void printArray(int[] array) {
+<span class="fc" id="L86">        int length = array.length;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L88">            System.out.print(array[i] + &quot; &quot;);</span>
+        }
+<span class="fc" id="L90">        System.out.println('\n');</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * РўРѕС‡РєР° РІС…РѕРґР° РїСЂРѕРіСЂР°РјРјС‹
+     * 
+     * @param args СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ Р°СЂРіСѓРјРµРЅС‚С‹
+     */
+    public static void main(String[] args) {
+<span class="nc" id="L99">        HeapSort heap = new HeapSort();</span>
+<span class="nc" id="L100">        heap.heapSort(new int[] { 4, 10, 3, 5, 1 });</span>
+<span class="nc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
