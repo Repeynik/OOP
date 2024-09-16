@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeapSort.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">org.task_1</a> &gt; <span class="el_source">HeapSort.java</span></div><h1>HeapSort.java</h1><pre class="source lang-java linenums">package org.task_1;
 
-/** Класс для реализации пирамидальной сортировки. */
-<span class="fc" id="L4">public class HeapSort {</span>
-    /**
-     * инициализация двоичной кучи.
-     *
-     * @param array массив чисел для сортировки
-     * @param length длина массива
-     */
-    public int[] initHeap(int[] array, int length) {
+<span class="nc" id="L3">public class HeapSort {</span>
 
-<span class="fc bfc" id="L13" title="All 2 branches covered.">        for (int currentElem = length / 2 - 1; currentElem &gt;= 0; currentElem--) {</span>
-<span class="fc" id="L14">            swiftDown(array, length, currentElem);</span>
+    private static int[] initHeap(int[] array, int length) {
+
+<span class="fc bfc" id="L7" title="All 2 branches covered.">        for (var currentElem = length / 2 - 1; currentElem &gt;= 0; currentElem--) {</span>
+<span class="fc" id="L8">            swiftDown(array, length, currentElem);</span>
         }
-<span class="fc" id="L16">        return array;</span>
+<span class="fc" id="L10">        return array;</span>
     }
-
-    /**
-     * Метод для перемещения местами двух элементов массива.
-     *
-     * @param array массив чисел
-     * @param largeElem индекс числа для перемещения
-     * @param tree индекса числа для перемещения
-     */
-    public void swap(int[] array, int largeElem, int tree) {
-<span class="fc" id="L27">        int temp = array[largeElem];</span>
-<span class="fc" id="L28">        array[largeElem] = array[tree];</span>
-<span class="fc" id="L29">        array[tree] = temp;</span>
-<span class="fc" id="L30">    }</span>
 
     /**
      * Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс.
@@ -36,65 +17,37 @@
      * @param length длина массива
      * @param currentElem текущий корень двоичной кучи
      */
-    public int[] swiftDown(int[] array, int length, int currentElem) {
-<span class="fc" id="L40">        int largeElem = currentElem;</span>
-<span class="fc" id="L41">        int leftTree = 2 * currentElem + 1;</span>
-<span class="fc" id="L42">        int rightTree = 2 * currentElem + 2;</span>
+    private static int[] swiftDown(int[] array, int length, int currentElem) {
+<span class="fc" id="L21">        var largeElem = currentElem;</span>
+<span class="fc" id="L22">        var leftTree = 2 * currentElem + 1;</span>
+<span class="fc" id="L23">        var rightTree = 2 * currentElem + 2;</span>
 
-<span class="fc bfc" id="L44" title="All 4 branches covered.">        if (leftTree &lt; length &amp;&amp; array[largeElem] &lt; array[leftTree]) {</span>
-<span class="fc" id="L45">            largeElem = leftTree;</span>
+<span class="fc bfc" id="L25" title="All 4 branches covered.">        if (leftTree &lt; length &amp;&amp; array[largeElem] &lt; array[leftTree]) {</span>
+<span class="fc" id="L26">            largeElem = leftTree;</span>
         }
 
-<span class="fc bfc" id="L48" title="All 4 branches covered.">        if (rightTree &lt; length &amp;&amp; array[largeElem] &lt; array[rightTree]) {</span>
-<span class="fc" id="L49">            largeElem = rightTree;</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (rightTree &lt; length &amp;&amp; array[largeElem] &lt; array[rightTree]) {</span>
+<span class="fc" id="L30">            largeElem = rightTree;</span>
         }
 
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (largeElem != currentElem) {</span>
-<span class="fc" id="L53">            swap(array, currentElem, largeElem);</span>
-<span class="fc" id="L54">            swiftDown(array, length, largeElem);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (largeElem != currentElem) {</span>
+<span class="fc" id="L34">            ArrayHelper.swap(array, currentElem, largeElem);</span>
+<span class="fc" id="L35">            swiftDown(array, length, largeElem);</span>
         }
-<span class="fc" id="L56">        return array;</span>
+<span class="fc" id="L37">        return array;</span>
     }
 
-    /**
-     * Сортировка массива с помощью пирамидальной сортировки на двоичной куче.
-     *
-     * @param array массив чисел
-     */
-    public int[] heapSort(int[] array) {
-<span class="fc" id="L65">        int length = array.length;</span>
+    public static int[] heapSort(int[] array) {
+<span class="fc" id="L41">        int length = array.length;</span>
 
-<span class="fc" id="L67">        int[] initArray = initHeap(array, length);</span>
+<span class="fc" id="L43">        var copyArray = array.clone();</span>
+<span class="fc" id="L44">        var initArray = initHeap(copyArray, length);</span>
 
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (int count = length - 1; count &gt;= 0; count--) {</span>
-<span class="fc" id="L70">            swap(initArray, 0, count);</span>
-<span class="fc" id="L71">            swiftDown(initArray, count, 0);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (var count = length - 1; count &gt;= 0; count--) {</span>
+<span class="fc" id="L47">            ArrayHelper.swap(initArray, 0, count);</span>
+<span class="fc" id="L48">            swiftDown(initArray, count, 0);</span>
         }
-<span class="fc" id="L73">        printArray(initArray);</span>
-<span class="fc" id="L74">        return (initArray);</span>
+<span class="fc" id="L50">        return initArray;</span>
     }
-
-    /**
-     * Метод для печати массива чисел.
-     *
-     * @param array массив чисел
-     */
-    public void printArray(int[] array) {
-<span class="fc" id="L83">        int length = array.length;</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L85">            System.out.print(array[i] + &quot; &quot;);</span>
-        }
-<span class="fc" id="L87">        System.out.println('\n');</span>
-<span class="fc" id="L88">    }</span>
-
-    /**
-     * Точка входа программы.
-     *
-     * @param args стандартные аргументы
-     */
-    public static void main(String[] args) {
-<span class="nc" id="L96">        HeapSort heap = new HeapSort();</span>
-<span class="nc" id="L97">        heap.heapSort(new int[] {4, 10, 3, 5, 1});</span>
-<span class="nc" id="L98">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

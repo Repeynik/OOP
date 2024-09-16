@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.task_1.HeapTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-09-05T11:58:05" hostname="LOL-IM-ALIVE-2" time="0.062">
+<testsuite name="org.task_1.HeapTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-09-16T15:40:39" hostname="LOL-IM-ALIVE-2" time="0.041">
   <properties/>
-  <testcase name="testSwap()" classname="org.task_1.HeapTest" time="0.036"/>
-  <testcase name="testHeapSort1()" classname="org.task_1.HeapTest" time="0.011"/>
+  <testcase name="testHeapSort1()" classname="org.task_1.HeapTest" time="0.034"/>
   <testcase name="testHeapSort2()" classname="org.task_1.HeapTest" time="0.001"/>
-  <testcase name="testHeapSort3()" classname="org.task_1.HeapTest" time="0.002"/>
+  <testcase name="testHeapSort3()" classname="org.task_1.HeapTest" time="0.001"/>
   <testcase name="testHeapSort4()" classname="org.task_1.HeapTest" time="0.001"/>
-  <testcase name="testSwiftDown()" classname="org.task_1.HeapTest" time="0.001"/>
-  <testcase name="initArr()" classname="org.task_1.HeapTest" time="0.001"/>
-  <system-out><![CDATA[0 2 2 4 4 4 5 8 
-
-
-
-1 1 1 1 
-
-1 2 3 4 5 6 7 8 9 10 
-
-]]></system-out>
+  <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

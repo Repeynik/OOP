@@ -23,9 +23,9 @@ dependencies {
     testImplementation(libs.junit.jupiter)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("org.jfree:jfreechart:1.5.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
