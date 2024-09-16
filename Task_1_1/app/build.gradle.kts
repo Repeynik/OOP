@@ -37,7 +37,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.task_1.HeapSort"
+    mainClass = "org.task_1.Main"
 }
 
 

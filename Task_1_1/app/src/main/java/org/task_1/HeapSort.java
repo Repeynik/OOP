@@ -70,7 +70,7 @@ public class HeapSort {
             swap(initArray, 0, count);
             swiftDown(initArray, count, 0);
         }
-        printArray(initArray);
+        // printArray(initArray);
         return (initArray);
     }
 
@@ -87,13 +87,36 @@ public class HeapSort {
         System.out.println('\n');
     }
 
-    /**
-     * Точка входа программы.
-     *
-     * @param args стандартные аргументы
-     */
-    public static void main(String[] args) {
-        HeapSort heap = new HeapSort();
-        heap.heapSort(new int[] {4, 10, 3, 5, 1});
+    /** Метод для сравнения практической и теоретической сложности алгоритма */
+    public void testPerformance() {
+        int[] sizes = {100, 200, 500, 1000, 2000}; // Размеры массивов
+        double C = 7;
+        for (int size : sizes) {
+            int[] array = new int[size];
+            for (int i = 0; i < size; i++) {
+                array[i] = (int) (Math.random() * 100); // Заполнение случайными числами
+            }
+
+            long totalDuration = 0;
+            int iterations = 50; // Количество итераций для усреднения
+            for (int j = 0; j < iterations; j++) {
+                int[] testArray = array.clone(); // Клонирование массива для каждой итерации
+                long startTime = System.nanoTime();
+                heapSort(testArray);
+                long endTime = System.nanoTime();
+                totalDuration += (endTime - startTime);
+            }
+
+            long averageDuration = totalDuration / iterations; // Среднее время выполнения
+
+            // Вычисление теоретического времени
+            double theoreticalTime =
+                    C * size * Math.log(size) / Math.log(2); // Логарифм по основанию 2
+
+            // Вывод результатов
+            System.out.printf(
+                    "Size: %d, Average Practical Time: %d ns, Theoretical Time: %.2f%n",
+                    size, averageDuration, theoreticalTime);
+        }
     }
 }
