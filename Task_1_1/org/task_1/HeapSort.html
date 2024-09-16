@@ -89,7 +89,6 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">HeapSort</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Класс для реализации пирамидальной сортировки.</div>
 </div>
 </section>
 <section class="summary">
@@ -112,47 +111,15 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#heapSort(int%5B%5D)" class="member-name-link">heapSort</a><wbr>(int[]&nbsp;array)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Сортировка массива с помощью пирамидальной сортировки на двоичной куче.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initHeap(int%5B%5D,int)" class="member-name-link">initHeap</a><wbr>(int[]&nbsp;array,
- int&nbsp;length)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">инициализация двоичной кучи.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#printArray(int%5B%5D)" class="member-name-link">printArray</a><wbr>(int[]&nbsp;array)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Метод для печати массива чисел.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swap(int%5B%5D,int,int)" class="member-name-link">swap</a><wbr>(int[]&nbsp;array,
- int&nbsp;largeElem,
- int&nbsp;tree)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Метод для перемещения местами двух элементов массива.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swiftDown(int%5B%5D,int,int)" class="member-name-link">swiftDown</a><wbr>(int[]&nbsp;array,
- int&nbsp;length,
- int&nbsp;currentElem)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#testPerformance()" class="member-name-link">testPerformance</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Метод для сравнения практической и теоретической сложности алгоритма</div>
-</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#heapSort(int%5B%5D)" class="member-name-link">heapSort</a><wbr>(int[]&nbsp;array)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -187,86 +154,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="initHeap(int[],int)">
-<h3>initHeap</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">initHeap</span><wbr><span class="parameters">(int[]&nbsp;array,
- int&nbsp;length)</span></div>
-<div class="block">инициализация двоичной кучи.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - массив чисел для сортировки</dd>
-<dd><code>length</code> - длина массива</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="swap(int[],int,int)">
-<h3>swap</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swap</span><wbr><span class="parameters">(int[]&nbsp;array,
- int&nbsp;largeElem,
- int&nbsp;tree)</span></div>
-<div class="block">Метод для перемещения местами двух элементов массива.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - массив чисел</dd>
-<dd><code>largeElem</code> - индекс числа для перемещения</dd>
-<dd><code>tree</code> - индекса числа для перемещения</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="swiftDown(int[],int,int)">
-<h3>swiftDown</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">swiftDown</span><wbr><span class="parameters">(int[]&nbsp;array,
- int&nbsp;length,
- int&nbsp;currentElem)</span></div>
-<div class="block">Просеивание кучи вниз, наибольший элемент массива становится на 0 индекс.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - массив чисел</dd>
-<dd><code>length</code> - длина массива</dd>
-<dd><code>currentElem</code> - текущий корень двоичной кучи</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="heapSort(int[])">
 <h3>heapSort</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">heapSort</span><wbr><span class="parameters">(int[]&nbsp;array)</span></div>
-<div class="block">Сортировка массива с помощью пирамидальной сортировки на двоичной куче.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - массив чисел</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="printArray(int[])">
-<h3>printArray</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">printArray</span><wbr><span class="parameters">(int[]&nbsp;array)</span></div>
-<div class="block">Метод для печати массива чисел.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - массив чисел</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="testPerformance()">
-<h3>testPerformance</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">testPerformance</span>()</div>
-<div class="block">Метод для сравнения практической и теоретической сложности алгоритма</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">heapSort</span><wbr><span class="parameters">(int[]&nbsp;array)</span></div>
 </div>
 </section>
 </li>
