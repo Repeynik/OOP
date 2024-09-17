@@ -62,6 +62,10 @@ tasks.javadoc {
     destinationDir = file("../build/docs/javadoc")
 }
 
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
+}
+
 spotless {
     java {
         googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
