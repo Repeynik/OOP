@@ -3,6 +3,9 @@ package org.task_1_2;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Класс для перечисления масти карт.
+ */
 enum Suit {
     Clubs("Трефы"),
     Diamonds("Бубны"),
@@ -20,6 +23,9 @@ enum Suit {
     }
 }
 
+/*
+ * Класс для перечисления значения карты.
+ */
 enum Value {
     Ace("Туз", 11),
     Jack("Валет", 10),
@@ -52,6 +58,9 @@ enum Value {
     }
 }
 
+/*
+ *  Класс для создания доски с картами с мастью и значением.
+ */
 public class Cards {
     private final Suit suit;
     private final Value value;
@@ -59,16 +68,6 @@ public class Cards {
     Cards(Suit suit, Value value) {
         this.suit = suit;
         this.value = value;
-    }
-
-    public static List<Cards> generateDeck() {
-        List<Cards> deck = new ArrayList<>();
-        for (Suit suit : Suit.values()) {
-            for (Value value : Value.values()) {
-                deck.add(new Cards(suit, value));
-            }
-        }
-        return deck;
     }
 
     public Suit getSuit() {
