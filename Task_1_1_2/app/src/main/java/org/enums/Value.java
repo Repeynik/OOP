@@ -5,7 +5,7 @@ package org.enums;
  */
 public enum Value {
     Ace("Туз", 11),
-    Ace_with_1("Туз",1),
+    Ace_with_1("Туз", 1),
     Jack("Валет", 10),
     Queen("Дама", 10),
     King("Король", 10),

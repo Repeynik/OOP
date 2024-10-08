@@ -1,4 +1,4 @@
-package org.task_1_2;
+package org.task_1_1_2;
 
 import java.util.Scanner;
 
@@ -7,7 +7,7 @@ public class UserInterface {
         while (!player.isStanding() && !player.isBusted()) {
             System.err.println("Ваш ход\n-----");
             System.out.println("Ваш счет: " + player.getPlayerScore(player.abstractCards));
-            System.out.print("Введите '1', чтобы взять карту, и '0', чтобы остановиться ...\n");
+            System.out.println("Введите '1', чтобы взять карту, и '0', чтобы остановиться ...");
 
             // Проверяем наличие следующей строки
             if (scanner.hasNextLine()) {
@@ -17,10 +17,16 @@ public class UserInterface {
                     System.out.println(
                             "Вы открыли карту "
                                     + player.getPlayerCards(player.abstractCards)
-                                            .get(player.getPlayerCards(player.abstractCards).size() - 1)
+                                            .get(
+                                                    player.getPlayerCards(player.abstractCards)
+                                                                    .size()
+                                                            - 1)
                                     + " ("
                                     + player.getPlayerCards(player.abstractCards)
-                                            .get(player.getPlayerCards(player.abstractCards).size() - 1)
+                                            .get(
+                                                    player.getPlayerCards(player.abstractCards)
+                                                                    .size()
+                                                            - 1)
                                             .getIntValue()
                                     + ")");
                     getScore(0, player, dealer);
@@ -41,7 +47,8 @@ public class UserInterface {
         System.out.println("Ход дилера\n-----");
         System.out.println(
                 "Дилер открывает закрытую карту "
-                        + dealer.getPlayerCards(dealer.abstractCards).get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                        + dealer.getPlayerCards(dealer.abstractCards)
+                                .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
                         + "("
                         + dealer.getPlayerCards(dealer.abstractCards)
                                 .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
@@ -52,12 +59,16 @@ public class UserInterface {
 
     public void dealerPlay(DefaultPlayer player, DefaultPlayer dealer) {
         System.out.println(
-                "Карты дилера: " + printDealerList(dealer) + " => " + dealer.getPlayerScore(dealer.abstractCards));
+                "Карты дилера: "
+                        + printPlayerList(dealer)
+                        + " => "
+                        + dealer.getPlayerScore(dealer.abstractCards));
         while (dealer.getPlayerScore(dealer.abstractCards) < 17) {
             dealer.hit();
             System.out.println(
                     "Дилер открывает карту "
-                            + dealer.getPlayerCards(dealer.abstractCards).get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                            + dealer.getPlayerCards(dealer.abstractCards)
+                                    .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
                             + "("
                             + dealer.getPlayerCards(dealer.abstractCards)
                                     .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
@@ -65,21 +76,6 @@ public class UserInterface {
                             + ")");
             getScore(1, player, dealer);
         }
-    }
-
-    public String printDealerList(DefaultPlayer dealer) {
-        var dealerCards = dealer.getPlayerCards(dealer.abstractCards);
-        String lineOfCards = "[";
-        for (Cards cards : dealerCards) {
-            lineOfCards += cards.toString();
-            lineOfCards += " (";
-            lineOfCards += cards.getIntValue();
-            lineOfCards += ")";
-            lineOfCards += ", ";
-        }
-        lineOfCards = removeLastChar(lineOfCards);
-        lineOfCards += "]";
-        return lineOfCards;
     }
 
     public String printPlayerList(DefaultPlayer player) {
@@ -103,11 +99,14 @@ public class UserInterface {
 
     public void getScore(int openDealer, DefaultPlayer player, DefaultPlayer dealer) {
         System.out.println(
-                "\tВаши карты: " + printPlayerList(player) + " => " + player.getPlayerScore(player.abstractCards));
+                "\tВаши карты: "
+                        + printPlayerList(player)
+                        + " => "
+                        + player.getPlayerScore(player.abstractCards));
         if (openDealer == 1) {
             System.out.println(
                     "\tКарты дилера: "
-                            + printDealerList(dealer)
+                            + printPlayerList(dealer)
                             + " => "
                             + dealer.getPlayerScore(dealer.abstractCards)
                             + "\n");

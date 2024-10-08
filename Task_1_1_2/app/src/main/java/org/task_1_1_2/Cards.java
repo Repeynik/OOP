@@ -1,4 +1,4 @@
-package org.task_1_2;
+package org.task_1_1_2;
 
 import org.enums.Suit;
 import org.enums.Value;

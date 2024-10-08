@@ -1,8 +1,7 @@
-package org.task_1_2;
+package org.task_1_1_2;
 
-import org.enums.GameState;
+import org.enums.*;
 import org.enums.Suit;
-import org.enums.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,9 @@ public class DefaultPlayer {
         List<Cards> deck = new ArrayList<>();
         for (var s : Suit.values()) {
             for (var v : Value.values()) {
-                deck.add(new Cards(s, v));
+                if (v.getValue() != 1) {
+                    deck.add(new Cards(s, v));
+                }
             }
         }
         return deck;
@@ -60,16 +61,21 @@ public class DefaultPlayer {
     }
 
     public List<Cards> getPlayerCards(List<Cards> cards) {
-        var sum = gameState.getSumm(abstractCards.toArray(new Cards[0]));
-        if (sum > 21){
-            for(var card: cards){
-                if(card.getIntValue() == 11){
-                    card = new Cards(card.getSuit(), Value.Ace_with_1);
-                    System.out.println(card);
+        int sum = gameState.getSumm(cards.toArray(new Cards[0]));
+
+        if (sum > 21) {
+            for (int i = 0; i < cards.size(); i++) {
+                var card = cards.get(i);
+                if (card.getIntValue() == 11) {
+                    cards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
+                    sum -= 10;
+                }
+                if (sum <= 21) {
+                    break;
                 }
             }
         }
-        return abstractCards;
+        return cards;
     }
 
     /*
@@ -99,15 +105,20 @@ public class DefaultPlayer {
     }
 
     public int getPlayerScore(List<Cards> cards) {
-        var sum = gameState.getSumm(abstractCards.toArray(new Cards[0]));
-        if (sum > 21){
-            for(var card: cards){
-                if(card.getIntValue() == 11){
-                    card = new Cards(card.getSuit(), Value.Ace_with_1);
-                    System.out.println(card);
+        int sum = gameState.getSumm(cards.toArray(new Cards[0]));
+
+        if (sum > 21) {
+            for (int i = 0; i < cards.size(); i++) {
+                var card = cards.get(i);
+                if (card.getIntValue() == 11) {
+                    cards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
+                    sum -= 10;
+                }
+                if (sum <= 21) {
+                    break;
                 }
             }
         }
-        return gameState.getSumm(abstractCards.toArray(new Cards[0]));
+        return sum;
     }
 }

@@ -1,4 +1,4 @@
-package org.task_1_2;
+package org.task_1_1_2;
 
 import org.enums.GameState;
 
@@ -59,12 +59,18 @@ public class BlackjackGame {
         } else if (player.isStanding() && dealer.isBusted()) {
             gameOver = true;
             gameState = GameState.Victory;
-        } else if (player.isStanding() && dealer.getPlayerScore(dealer.abstractCards) > player.getPlayerScore(player.abstractCards)) {
+        } else if (player.isStanding()
+                && dealer.getPlayerScore(dealer.abstractCards)
+                        > player.getPlayerScore(player.abstractCards)) {
             gameOver = true;
-        } else if (player.isStanding() && dealer.getPlayerScore(dealer.abstractCards) < player.getPlayerScore(player.abstractCards)) {
+        } else if (player.isStanding()
+                && dealer.getPlayerScore(dealer.abstractCards)
+                        < player.getPlayerScore(player.abstractCards)) {
             gameOver = true;
             gameState = GameState.Victory;
-        } else if (player.isStanding() && dealer.getPlayerScore(dealer.abstractCards) == player.getPlayerScore(player.abstractCards)) {
+        } else if (player.isStanding()
+                && dealer.getPlayerScore(dealer.abstractCards)
+                        == player.getPlayerScore(player.abstractCards)) {
             gameOver = true;
             gameState = GameState.Draw;
         }

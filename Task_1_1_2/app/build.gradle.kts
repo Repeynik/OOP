@@ -37,7 +37,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.task_1_2.Main"
+    mainClass = "org.task_1_1_2.Main"
 }
 
 

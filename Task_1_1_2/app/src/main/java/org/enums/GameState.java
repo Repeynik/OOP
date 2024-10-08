@@ -1,6 +1,6 @@
 package org.enums;
 
-import org.task_1_2.Cards;
+import org.task_1_1_2.Cards;
 
 public enum GameState {
     Victory(1),
@@ -21,8 +21,8 @@ public enum GameState {
     public int getSumm(Cards[] cards) {
         int sum = 0;
         for (var card : cards) {
-            System.out.println(card.getIntValue());
-                sum += card.getIntValue();
+            // System.out.println(card.getIntValue());
+            sum += card.getIntValue();
         }
         return sum;
     }
