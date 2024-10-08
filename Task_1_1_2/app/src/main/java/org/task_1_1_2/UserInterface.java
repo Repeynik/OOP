@@ -6,25 +6,25 @@ public class UserInterface {
     public void playerInput(Scanner scanner, DefaultPlayer player, DefaultPlayer dealer) {
         while (!player.isStanding() && !player.isBusted()) {
             System.err.println("Ваш ход\n-----");
-            System.out.println("Ваш счет: " + player.getPlayerScore(player.abstractCards));
+            System.out.println("Ваш счет: " + player.getPlayerScore());
             System.out.println("Введите '1', чтобы взять карту, и '0', чтобы остановиться ...");
 
             // Проверяем наличие следующей строки
             if (scanner.hasNextLine()) {
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("1")) {
-                    player.hit();
+                    player.dealCard();
                     System.out.println(
                             "Вы открыли карту "
-                                    + player.getPlayerCards(player.abstractCards)
+                                    + player.getPlayerCards()
                                             .get(
-                                                    player.getPlayerCards(player.abstractCards)
+                                                    player.getPlayerCards()
                                                                     .size()
                                                             - 1)
                                     + " ("
-                                    + player.getPlayerCards(player.abstractCards)
+                                    + player.getPlayerCards()
                                             .get(
-                                                    player.getPlayerCards(player.abstractCards)
+                                                    player.getPlayerCards()
                                                                     .size()
                                                             - 1)
                                             .getIntValue()
@@ -47,11 +47,11 @@ public class UserInterface {
         System.out.println("Ход дилера\n-----");
         System.out.println(
                 "Дилер открывает закрытую карту "
-                        + dealer.getPlayerCards(dealer.abstractCards)
-                                .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                        + dealer.getPlayerCards()
+                                .get(dealer.getPlayerCards().size() - 1)
                         + "("
-                        + dealer.getPlayerCards(dealer.abstractCards)
-                                .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                        + dealer.getPlayerCards()
+                                .get(dealer.getPlayerCards().size() - 1)
                                 .getIntValue()
                         + ")");
         dealerPlay(player, dealer);
@@ -62,16 +62,16 @@ public class UserInterface {
                 "Карты дилера: "
                         + printPlayerList(dealer)
                         + " => "
-                        + dealer.getPlayerScore(dealer.abstractCards));
-        while (dealer.getPlayerScore(dealer.abstractCards) < 17) {
-            dealer.hit();
+                        + dealer.getPlayerScore());
+        while (dealer.getPlayerScore() < 17) {
+            dealer.dealCard();
             System.out.println(
                     "Дилер открывает карту "
-                            + dealer.getPlayerCards(dealer.abstractCards)
-                                    .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                            + dealer.getPlayerCards()
+                                    .get(dealer.getPlayerCards().size() - 1)
                             + "("
-                            + dealer.getPlayerCards(dealer.abstractCards)
-                                    .get(dealer.getPlayerCards(dealer.abstractCards).size() - 1)
+                            + dealer.getPlayerCards()
+                                    .get(dealer.getPlayerCards().size() - 1)
                                     .getIntValue()
                             + ")");
             getScore(1, player, dealer);
@@ -79,7 +79,7 @@ public class UserInterface {
     }
 
     public String printPlayerList(DefaultPlayer player) {
-        var playerCards = player.getPlayerCards(player.abstractCards);
+        var playerCards = player.getPlayerCards();
         String lineOfCards = "[";
         for (Cards cards : playerCards) {
             lineOfCards += cards.toString();
@@ -102,20 +102,20 @@ public class UserInterface {
                 "\tВаши карты: "
                         + printPlayerList(player)
                         + " => "
-                        + player.getPlayerScore(player.abstractCards));
+                        + player.getPlayerScore());
         if (openDealer == 1) {
             System.out.println(
                     "\tКарты дилера: "
                             + printPlayerList(dealer)
                             + " => "
-                            + dealer.getPlayerScore(dealer.abstractCards)
+                            + dealer.getPlayerScore()
                             + "\n");
         } else {
             System.out.println(
                     "\tКарты дилера: ["
-                            + dealer.getPlayerCards(dealer.abstractCards).get(0)
+                            + dealer.getPlayerCards().get(0)
                             + " ("
-                            + dealer.getPlayerCards(dealer.abstractCards).get(0).getIntValue()
+                            + dealer.getPlayerCards().get(0).getIntValue()
                             + ")"
                             + ", <закрытая карта>]"
                             + "\n");
@@ -124,7 +124,7 @@ public class UserInterface {
 
     public void gameOverText(DefaultPlayer player, DefaultPlayer dealer) {
         System.out.println("Итоговый счет:");
-        System.out.println("Игрок: " + player.getPlayerScore(player.abstractCards));
-        System.out.println("Дилер: " + dealer.getPlayerScore(dealer.abstractCards));
+        System.out.println("Игрок: " + player.getPlayerScore());
+        System.out.println("Дилер: " + dealer.getPlayerScore());
     }
 }

@@ -1,7 +1,6 @@
 package org.task_1_1_2;
 
 import org.enums.*;
-import org.enums.Suit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +10,26 @@ import java.util.Random;
  * Класс реализующий базовую логику игроков.
  */
 public class DefaultPlayer {
-    protected List<Cards> deck;
-    protected List<Cards> abstractCards;
+    private List<Cards> deck;
+    private List<Cards> abstractCards;
 
     private boolean isStanding;
-    protected GameState gameState;
+
+    public List<Cards> getAbstractCards(){
+        return abstractCards;
+    }
+
+    public List<Cards> getDeck(){
+        return deck;
+    }
 
     /*
      * Создание игровой доски и списка карт для игроков.
      */
-    public DefaultPlayer(GameState gameState) {
+    public DefaultPlayer() {
         this.deck = generateDeck();
         this.abstractCards = new ArrayList<>();
         this.isStanding = false;
-        this.gameState = gameState;
     }
 
     /*
@@ -56,18 +61,18 @@ public class DefaultPlayer {
     /*
      * Добавление карты в руку игрока.
      */
-    void dealCard(List<Cards> abstractCards) {
+    void dealCard() {
         abstractCards.add(getCard());
     }
 
-    public List<Cards> getPlayerCards(List<Cards> cards) {
-        int sum = gameState.getSumm(cards.toArray(new Cards[0]));
+    public List<Cards> getPlayerCards() {
+        int sum = getSumm(abstractCards.toArray(new Cards[0]));
 
         if (sum > 21) {
-            for (int i = 0; i < cards.size(); i++) {
-                var card = cards.get(i);
+            for (int i = 0; i < abstractCards.size(); i++) {
+                var card = abstractCards.get(i);
                 if (card.getIntValue() == 11) {
-                    cards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
+                    abstractCards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
                     sum -= 10;
                 }
                 if (sum <= 21) {
@@ -75,18 +80,18 @@ public class DefaultPlayer {
                 }
             }
         }
-        return cards;
+        return abstractCards;
     }
 
     /*
      * Проверка состояния - а не проиграл ли игрок в данный момент.
      */
     public boolean isBusted() {
-        return gameState.getGameSituation(abstractCards.toArray(new Cards[0]), false) == -1;
+        return getGameSituation(abstractCards.toArray(new Cards[0]), false) == -1;
     }
 
     public boolean isBlackjack() {
-        return gameState.getGameSituation(abstractCards.toArray(new Cards[0]), true) == 1;
+        return getGameSituation(abstractCards.toArray(new Cards[0]), true) == 1;
     }
 
     /*
@@ -96,22 +101,18 @@ public class DefaultPlayer {
         return isStanding;
     }
 
-    public void hit() {
-        dealCard(abstractCards);
-    }
-
     public void stand() {
         isStanding = true;
     }
 
-    public int getPlayerScore(List<Cards> cards) {
-        int sum = gameState.getSumm(cards.toArray(new Cards[0]));
+    public int getPlayerScore() {
+        int sum = getSumm(abstractCards.toArray(new Cards[0]));
 
         if (sum > 21) {
-            for (int i = 0; i < cards.size(); i++) {
-                var card = cards.get(i);
+            for (int i = 0; i < abstractCards.size(); i++) {
+                var card = abstractCards.get(i);
                 if (card.getIntValue() == 11) {
-                    cards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
+                    abstractCards.set(i, new Cards(card.getSuit(), Value.Ace_with_1));
                     sum -= 10;
                 }
                 if (sum <= 21) {
@@ -120,5 +121,30 @@ public class DefaultPlayer {
             }
         }
         return sum;
+    }
+
+        public int getSumm(Cards[] cards) {
+        int sum = 0;
+        for (var card : cards) {
+            // System.out.println(card.getIntValue());
+            sum += card.getIntValue();
+        }
+        return sum;
+    }
+
+    /*
+     * Проверка статуса игроков во время игры.
+     * При достижении определенного числа карт игра завершается.
+     */
+    public int getGameSituation(Cards[] cards, boolean blackJackState) {
+        if (blackJackState) {
+            return GameState.BlackJack.getState();
+        } else if (getSumm(cards) == 21) {
+            return GameState.Victory.getState();
+        } else if (getSumm(cards) > 21) {
+
+            return GameState.Defeat.getState();
+        }
+        return GameState.Draw.getState();
     }
 }

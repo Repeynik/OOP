@@ -13,8 +13,8 @@ public class BlackjackGame {
 
     public BlackjackGame() {
         this.gameState = GameState.Defeat; // Устанавливаем начальное состояние игры
-        this.player = new DefaultPlayer(gameState); // Передаем gameState в конструктор
-        this.dealer = new DefaultPlayer(gameState); // Передаем gameState в конструктор
+        this.player = new DefaultPlayer(); // Передаем gameState в конструктор
+        this.dealer = new DefaultPlayer(); // Передаем gameState в конструктор
         this.userInterface = new UserInterface();
         this.gameOver = false;
     }
@@ -29,10 +29,10 @@ public class BlackjackGame {
 
         } else {
             // Раздача карт
-            player.dealCard(player.getPlayerCards(player.abstractCards));
-            player.dealCard(player.getPlayerCards(player.abstractCards));
-            dealer.dealCard(dealer.getPlayerCards(dealer.abstractCards));
-            dealer.dealCard(dealer.getPlayerCards(dealer.abstractCards));
+            player.dealCard();
+            player.dealCard();
+            dealer.dealCard();
+            dealer.dealCard();
 
             // Вывод карт игроков
             userInterface.getScore(0, player, dealer);
@@ -60,17 +60,17 @@ public class BlackjackGame {
             gameOver = true;
             gameState = GameState.Victory;
         } else if (player.isStanding()
-                && dealer.getPlayerScore(dealer.abstractCards)
-                        > player.getPlayerScore(player.abstractCards)) {
+                && dealer.getPlayerScore()
+                        > player.getPlayerScore()) {
             gameOver = true;
         } else if (player.isStanding()
-                && dealer.getPlayerScore(dealer.abstractCards)
-                        < player.getPlayerScore(player.abstractCards)) {
+                && dealer.getPlayerScore()
+                        < player.getPlayerScore()) {
             gameOver = true;
             gameState = GameState.Victory;
         } else if (player.isStanding()
-                && dealer.getPlayerScore(dealer.abstractCards)
-                        == player.getPlayerScore(player.abstractCards)) {
+                && dealer.getPlayerScore()
+                        == player.getPlayerScore()) {
             gameOver = true;
             gameState = GameState.Draw;
         }
