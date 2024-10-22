@@ -94,27 +94,16 @@ public class IncidenceMatrixGraph implements Graph {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             int vertexCount = Integer.parseInt(br.readLine());
-            List<int[]> edges = new ArrayList<>();
-            vertices = new ArrayList<>();
 
             for (int i = 0; i < vertexCount; i++) {
-                vertices.add(i);
+                addVertex(i);
             }
 
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(" ");
                 int from = Integer.parseInt(parts[0]);
                 int to = Integer.parseInt(parts[1]);
-                edges.add(new int[] {from, to});
-            }
-
-            incidenceMatrix = new int[vertexCount][edges.size()];
-            for (int j = 0; j < edges.size(); j++) {
-                int[] edge = edges.get(j);
-                int fromIndex = vertices.indexOf(edge[0]);
-                int toIndex = vertices.indexOf(edge[1]);
-                incidenceMatrix[fromIndex][j] = 1;
-                incidenceMatrix[toIndex][j] = 1;
+                addEdge(from, to);
             }
         } catch (IOException e) {
             e.printStackTrace();

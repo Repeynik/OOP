@@ -5,27 +5,27 @@ package org.Task_1_1_4;
 
 public class GraphDemo {
     public static void main(String[] args) {
-        String filename = "graph.txt";
-
+        String filename1 = "/home/aly0na/OOP/OOP/Task_1_1_4/app/src/main/java/org/Task_1_1_4/graph1.txt";
+        String filename2 = "/home/aly0na/OOP/OOP/Task_1_1_4/app/src/main/java/org/Task_1_1_4/graph2.txt";
         // Граф с матрицей смежности
         AdjacencyMatrixGraph adjacencyMatrixGraph = new AdjacencyMatrixGraph(5);
-        // adjacencyMatrixGraph.readFile(filename);
+        adjacencyMatrixGraph.readFile(filename1);
         System.out.println("Изначальная матрица смежности:");
         adjacencyMatrixGraph.printGraph();
 
         // Добавление вершины
-        System.out.println("Добавление вершины 5:");
-        adjacencyMatrixGraph.addVertex(5);
+        System.out.println("Добавление вершины 6:");
+        adjacencyMatrixGraph.addVertex(6);
         adjacencyMatrixGraph.printGraph();
 
         // Добавление рёбер
-        System.out.println("Добавление ребра (4, 5):");
-        adjacencyMatrixGraph.addEdge(4, 5);
+        System.out.println("Добавление ребра (5, 6):");
+        adjacencyMatrixGraph.addEdge(5, 6);
         adjacencyMatrixGraph.printGraph();
 
         // Удаление рёбер
-        System.out.println("Удаление ребра (4, 5):");
-        adjacencyMatrixGraph.removeEdge(4, 5);
+        System.out.println("Удаление ребра (5, 6):");
+        adjacencyMatrixGraph.removeEdge(5, 6);
         adjacencyMatrixGraph.printGraph();
 
         // Удаление вершины
@@ -35,7 +35,7 @@ public class GraphDemo {
 
         // Граф со списком смежности
         AdjacencyListGraph adjacencyListGraph = new AdjacencyListGraph();
-        // adjacencyListGraph.readFile(filename);
+        adjacencyListGraph.readFile(filename2);
         System.out.println("\nИзначальный список смежности:");
         adjacencyListGraph.printGraph();
 
@@ -60,8 +60,8 @@ public class GraphDemo {
         adjacencyListGraph.printGraph();
 
         // Граф с матрицей инцидентности
-        IncidenceMatrixGraph incidenceMatrixGraph = new IncidenceMatrixGraph(5);
-        // incidenceMatrixGraph.readFile(filename);
+        IncidenceMatrixGraph incidenceMatrixGraph = new IncidenceMatrixGraph(6);
+        incidenceMatrixGraph.readFile(filename1);
         System.out.println("\nИзначальная матрица инцидентности:");
         incidenceMatrixGraph.printGraph();
 

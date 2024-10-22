@@ -87,11 +87,9 @@ public class AdjacencyMatrixGraph implements Graph {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             int vertexCount = Integer.parseInt(br.readLine());
-            adjacencyMatrix = new int[vertexCount][vertexCount];
-            vertices = new ArrayList<>();
 
             for (int i = 0; i < vertexCount; i++) {
-                vertices.add(i);
+                addVertex(i);
             }
 
             while ((line = br.readLine()) != null) {

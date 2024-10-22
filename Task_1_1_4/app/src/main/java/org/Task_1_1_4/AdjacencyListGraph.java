@@ -49,16 +49,14 @@ public class AdjacencyListGraph implements Graph {
     public void readFile(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
-            adjacencyList = new HashMap<>();
 
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(" ");
                 int from = Integer.parseInt(parts[0]);
                 int to = Integer.parseInt(parts[1]);
-
-                adjacencyList.putIfAbsent(from, new ArrayList<>());
-                adjacencyList.putIfAbsent(to, new ArrayList<>());
-                adjacencyList.get(from).add(to);
+                addVertex(from);
+                addVertex(to);
+                addEdge((Integer) from, (Integer) to);
             }
         } catch (IOException e) {
             e.printStackTrace();
