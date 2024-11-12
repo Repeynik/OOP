@@ -69,6 +69,20 @@ public class HashTable<K, V> {
         }
     }
 
+    public void remove(K key, int index) {
+        Entry<K, V> entry = map.get(key);
+        if (entry != null) {
+            if (index >= 0 && index < entry.values.size()) {
+                entry.values.remove(index);
+                modCount++;
+            } else {
+                throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
+            }
+        } else {
+            throw new NoSuchElementException("Ключ не найден: " + key);
+        }
+    }
+
     public List<V> get(K key) {
         Entry<K, V> entry = map.get(key);
         return entry != null ? new ArrayList<>(entry.values) : Collections.emptyList();
@@ -151,6 +165,10 @@ public class HashTable<K, V> {
         hashTable.update("one", 10, 1); 
         System.out.println(hashTable.get("one"));
         
+        System.out.println(hashTable);
+
+        hashTable.remove("one", 1);
+
         System.out.println(hashTable);
     }
 }
