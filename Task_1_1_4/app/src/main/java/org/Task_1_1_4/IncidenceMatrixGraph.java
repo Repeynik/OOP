@@ -154,11 +154,6 @@ public class IncidenceMatrixGraph implements Graph {
                 }
             }
         }
-
-        if (result.size() != vertices.size()) {
-            throw new IllegalStateException("Есть цикл");
-        }
-
         return result;
     }
 

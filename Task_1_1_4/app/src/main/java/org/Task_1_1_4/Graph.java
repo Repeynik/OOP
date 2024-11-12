@@ -15,10 +15,6 @@ public interface Graph {
 
     void readFile(String filePath);
 
-    String toString();
-
-    boolean equals(Object obj);
-
     List<Integer> topologicalSort();
 
     void printGraph();
