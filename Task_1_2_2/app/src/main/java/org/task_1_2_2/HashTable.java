@@ -90,7 +90,8 @@ public class HashTable<K, V> implements Iterable<Entry<K, V>> {
         this.threshold = (int) (INITIAL_CAPACITY * LOAD_FACTOR);
     }
 
-    public HashTable(final Entry<K, V>[] table, final int size, final int modCount, final int threshold) {
+    public HashTable(
+            final Entry<K, V>[] table, final int size, final int modCount, final int threshold) {
         this.table = table;
         this.size = size;
         this.modCount = modCount;
@@ -221,7 +222,6 @@ public class HashTable<K, V> implements Iterable<Entry<K, V>> {
         return result;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -246,7 +246,10 @@ public class HashTable<K, V> implements Iterable<Entry<K, V>> {
         for (int i = 0; i < table.length; i++) {
             var current = table[i];
             while (current != null) {
-                sb.append(current.key.toString()).append("=").append(current.value.toString()).append(", ");
+                sb.append(current.key.toString())
+                        .append("=")
+                        .append(current.value.toString())
+                        .append(", ");
                 current = current.next;
             }
         }

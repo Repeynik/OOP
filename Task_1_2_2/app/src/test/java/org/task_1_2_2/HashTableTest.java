@@ -1,8 +1,10 @@
 package org.task_1_2_2;
 
-import org.junit.jupiter.api.Test;
-import java.util.ConcurrentModificationException;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ConcurrentModificationException;
 
 public class HashTableTest {
 
@@ -47,7 +49,6 @@ public class HashTableTest {
         assertTrue(hashTable.containsKey("apple"));
         assertFalse(hashTable.containsKey("banana"));
     }
-
 
     @Test
     public void testUpdateExistingKey() {
