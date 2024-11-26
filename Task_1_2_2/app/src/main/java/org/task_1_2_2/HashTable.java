@@ -1,135 +1,237 @@
 package org.task_1_2_2;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class HashTable<K, V> {
-    private static class Entry<K, V> {
-        K key;
-        List<V> values;
-
-        Entry(K key, V value) {
-            this.key = key;
-            this.values = new ArrayList<>(Collections.singletonList(value));
-        }
-    }
-
-    private Map<K, Entry<K, V>> map;
-    private int size;
-    private int modCount;
-
-    public HashTable() {
-        this.map = new HashMap<>();
-        this.size = 0;
-        this.modCount = 0;
-    }
-
-    public void put(K key, V value) {
-        Entry<K, V> entry = map.get(key);
-        if (entry != null) {
-            entry.values.add(value);
-        } else {
-            entry = new Entry<>(key, value);
-            map.put(key, entry);
-            size++;
-        }
-        modCount++;
-    }
-
-    public void update(K key, V newValue) {
-        Entry<K, V> entry = map.get(key);
-        if (entry != null) {
-            if (!entry.values.isEmpty()) {
-                entry.values.set(0, newValue);
-            }
-            modCount++;
-        } else {
-            throw new NoSuchElementException("Ключ не найден: " + key);
-        }
-    }
-
-    public void update(K key, V newValue, int index) {
-        Entry<K, V> entry = map.get(key);
-        if (entry != null) {
-            if (index >= 0 && index < entry.values.size()) {
-                entry.values.set(index, newValue);
-                modCount++;
-            } else {
-                throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
-            }
-        } else {
-            throw new NoSuchElementException("Ключ не найден: " + key);
-        }
-    }
-    
-    
-    public void remove(K key) {
-        if (map.remove(key) != null) {
-            size--;
-            modCount++;
-        }
-    }
-
-    public void remove(K key, int index) {
-        Entry<K, V> entry = map.get(key);
-        if (entry != null) {
-            if (index >= 0 && index < entry.values.size()) {
-                entry.values.remove(index);
-                modCount++;
-            } else {
-                throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
-            }
-        } else {
-            throw new NoSuchElementException("Ключ не найден: " + key);
-        }
-    }
-
-    public List<V> get(K key) {
-        Entry<K, V> entry = map.get(key);
-        return entry != null ? new ArrayList<>(entry.values) : Collections.emptyList();
-    }
-
-    public boolean containsKey(K key) {
-        return map.containsKey(key);
-    }
-
-    public Iterator<Entry<K, V>> iterator() {
-        return new HashTableIterator();
-    }
+public class HashTable<K, V> implements Iterable<Entry<K, V>> {
 
     private class HashTableIterator implements Iterator<Entry<K, V>> {
-        private Iterator<Entry<K, V>> currentIterator = map.values().iterator();
         private int expectedModCount = modCount;
+        private int index = 0;
+        private Entry<K, V> next = null;
+        private Entry<K, V> current = null;
+
+        public HashTableIterator() {
+            while (index < table.length && table[index] == null) {
+                index++;
+            }
+            if (index < table.length) {
+                next = table[index];
+            }
+        }
 
         @Override
         public boolean hasNext() {
-            if (modCount != expectedModCount) {
-                throw new ConcurrentModificationException();
-            }
-            return currentIterator.hasNext();
+            checkForComodification();
+            return next != null;
         }
 
         @Override
         public Entry<K, V> next() {
+            checkForComodification();
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return currentIterator.next();
+            current = next;
+            next = current.next;
+            if (next == null) {
+                index++;
+                while (index < table.length && table[index] == null) {
+                    index++;
+                }
+                if (index < table.length) {
+                    next = table[index];
+                }
+            }
+            return current;
+        }
+
+        @Override
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+            checkForComodification();
+            HashTable.this.remove(current.key);
+            current = null;
+            expectedModCount = modCount;
+        }
+
+        private void checkForComodification() {
+            if (modCount != expectedModCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    private static final int INITIAL_CAPACITY = 16;
+    private static final double LOAD_FACTOR = 0.75;
+
+    public static int getInitialCapacity() {
+        return INITIAL_CAPACITY;
+    }
+
+    public static double getLoadFactor() {
+        return LOAD_FACTOR;
+    }
+
+    private Entry<K, V>[] table;
+    private int size;
+    private int modCount;
+    private int threshold;
+
+    @SuppressWarnings("unchecked")
+    public HashTable() {
+        this.table = new Entry[INITIAL_CAPACITY];
+        this.size = 0;
+        this.modCount = 0;
+        this.threshold = (int) (INITIAL_CAPACITY * LOAD_FACTOR);
+    }
+
+    public HashTable(
+            final Entry<K, V>[] table, final int size, final int modCount, final int threshold) {
+        this.table = table;
+        this.size = size;
+        this.modCount = modCount;
+        this.threshold = threshold;
+    }
+
+    public void put(final K key, final V value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        final int index = hash(key);
+        if (table[index] == null) {
+            table[index] = new Entry<>(key, value);
+            size++;
+            modCount++;
+            if (size >= threshold) {
+                resize();
+            }
+        } else {
+            var current = table[index];
+            while (current != null) {
+                if (current.key.equals(key)) {
+                    current.value = value;
+                    return;
+                }
+                if (current.next == null) {
+                    current.next = new Entry<>(key, value);
+                    size++;
+                    modCount++;
+                    if (size >= threshold) {
+                        resize();
+                    }
+                    return;
+                }
+                current = current.next;
+            }
+        }
+    }
+
+    public V get(final K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        final int index = hash(key);
+        var current = table[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return current.value;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
+    public void remove(final K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        final int index = hash(key);
+        var current = table[index];
+        Entry<K, V> prev = null;
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (prev == null) {
+                    table[index] = current.next;
+                } else {
+                    prev.next = current.next;
+                }
+                size--;
+                modCount++;
+                return;
+            }
+            prev = current;
+            current = current.next;
+        }
+    }
+
+    public boolean containsKey(final K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        final int index = hash(key);
+        var current = table[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    public void update(final K key, final V value) {
+        if (!containsKey(key)) {
+            throw new IllegalArgumentException("Key not found");
+        }
+        put(key, value);
+    }
+
+    int hash(final K key) {
+        final int hashCode = (key == null) ? 0 : key.hashCode();
+        return hashCode & (table.length - 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void resize() {
+        final var oldTable = table;
+        final int newCapacity = table.length * 2;
+        table = new Entry[newCapacity];
+        threshold = (int) (newCapacity * LOAD_FACTOR);
+        size = 0;
+        for (var entry : oldTable) {
+            while (entry != null) {
+                put(entry.key, entry.value);
+                entry = entry.next;
+            }
         }
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof HashTable)) return false;
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        for (var entry : this) {
+            result = prime * result + ((entry.key == null) ? 0 : entry.key.hashCode());
+            result = prime * result + ((entry.value == null) ? 0 : entry.value.hashCode());
+        }
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         @SuppressWarnings("unchecked")
-        HashTable<K, V> other = (HashTable<K, V>) obj;
-
-        if (this.size != other.size) return false;
-
-        for (Entry<K, V> entry : map.values()) {
-            List<V> otherValues = other.get(entry.key);
-            if (!Objects.equals(entry.values, otherValues)) {
+        var that = (HashTable<K, V>) o;
+        if (size != that.size) return false;
+        for (var entry : this) {
+            V thatValue = that.get(entry.key);
+            if (!Objects.equals(thatValue, entry.value)) {
                 return false;
             }
         }
@@ -138,37 +240,58 @@ public class HashTable<K, V> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("{");
-        for (Entry<K, V> entry : map.values()) {
-            sb.append(entry.key).append("=").append(entry.values).append(", ");
+        if (size == 0) return "{}";
+        final var sb = new StringBuilder();
+        sb.append("{");
+        for (int i = 0; i < table.length; i++) {
+            var current = table[i];
+            while (current != null) {
+                sb.append(current.key.toString())
+                        .append("=")
+                        .append(current.value.toString())
+                        .append(", ");
+                current = current.next;
+            }
         }
-        if (sb.length() > 1) {
-            sb.setLength(sb.length() - 2);
-        }
+        sb.setLength(sb.length() - 2);
         sb.append("}");
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        HashTable<String, Number> hashTable = new HashTable<>();
-        hashTable.put("one", 1);
-        hashTable.put("two", 2);
-        hashTable.put("three", 3);
-        hashTable.put("one", 1.0); 
-        
-        hashTable.put("one", 1.0);
-       
-        hashTable.put("one", 1.0); 
-       
-        System.out.println(hashTable.get("one"));
-        
-        hashTable.update("one", 10, 1); 
-        System.out.println(hashTable.get("one"));
-        
-        System.out.println(hashTable);
+    @Override
+    public Iterator<Entry<K, V>> iterator() {
+        return new HashTableIterator();
+    }
 
-        hashTable.remove("one", 1);
+    public Entry<K, V>[] getTable() {
+        return table;
+    }
 
-        System.out.println(hashTable);
+    public void setTable(final Entry<K, V>[] table) {
+        this.table = table;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(final int size) {
+        this.size = size;
+    }
+
+    public int getModCount() {
+        return modCount;
+    }
+
+    public void setModCount(final int modCount) {
+        this.modCount = modCount;
+    }
+
+    public int getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(final int threshold) {
+        this.threshold = threshold;
     }
 }

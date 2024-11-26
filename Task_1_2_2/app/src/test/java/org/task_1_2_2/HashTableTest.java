@@ -1,96 +1,128 @@
 package org.task_1_2_2;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class HashTableTest {
-    private HashTable<String, Integer> hashTable;
+import org.junit.jupiter.api.Test;
 
-    @BeforeEach
-    void setUp() {
-        hashTable = new HashTable<>();
+import java.util.ConcurrentModificationException;
+
+public class HashTableTest {
+
+    @Test
+    public void testStaticMethods() {
+        assertEquals(16, HashTable.getInitialCapacity());
+        assertEquals(0.75, HashTable.getLoadFactor(), 0.0001);
     }
 
     @Test
-    void testPutAndGet() {
-        hashTable.put("one", 1);
-        hashTable.put("two", 2);
-        hashTable.put("one", 3);
-
-        List<Integer> valuesOne = hashTable.get("one");
-        List<Integer> valuesTwo = hashTable.get("two");
-
-        assertEquals(List.of(1, 3), valuesOne);
-        assertEquals(List.of(2), valuesTwo);
+    public void testConstructor() {
+        var hashTable = new HashTable<>();
+        assertEquals(16, hashTable.getTable().length);
+        assertEquals(0, hashTable.getSize());
+        assertEquals(0, hashTable.getModCount());
+        assertEquals(12, hashTable.getThreshold());
     }
 
     @Test
-    void testUpdate() {
-        hashTable.put("one", 1);
-        hashTable.update("one", 10);
-        assertEquals(List.of(10), hashTable.get("one"));
-
-        hashTable.put("one", 20);
-        hashTable.update("one", 15, 1); 
-        assertEquals(List.of(10, 15), hashTable.get("one"));
+    public void testPutAndGet() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        hashTable.put("carrot", "vegetable");
+        assertEquals("fruit", hashTable.get("apple"));
+        assertEquals("vegetable", hashTable.get("carrot"));
+        assertNull(hashTable.get("banana"));
     }
 
     @Test
-    void testUpdateNonExistentKey() {
-        assertThrows(NoSuchElementException.class, () -> {
-            hashTable.update("nonexistent", 1);
-        });
+    public void testRemove() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        hashTable.remove("apple");
+        assertNull(hashTable.get("apple"));
+        assertEquals(0, hashTable.getSize());
     }
 
     @Test
-    void testUpdateWithIndexOutOfBounds() {
-        hashTable.put("one", 1);
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            hashTable.update("one", 2, 1);
-        });
+    public void testContainsKey() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        assertTrue(hashTable.containsKey("apple"));
+        assertFalse(hashTable.containsKey("banana"));
     }
 
     @Test
-    void testRemove() {
-        hashTable.put("one", 1);
-        hashTable.put("two", 2);
-        hashTable.remove("one");
-        assertFalse(hashTable.containsKey("one"));
-        assertTrue(hashTable.containsKey("two"));
+    public void testUpdateExistingKey() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        hashTable.update("apple", "green fruit");
+        assertEquals("green fruit", hashTable.get("apple"));
     }
 
     @Test
-    void testContainsKey() {
-        hashTable.put("one", 1);
-        assertTrue(hashTable.containsKey("one"));
-        assertFalse(hashTable.containsKey("two"));
+    public void testIterator() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        hashTable.put("carrot", "vegetable");
+        int count = 0;
+        for (var entry : hashTable) {
+            assertNotNull(entry);
+            count++;
+        }
+        assertEquals(2, count);
     }
 
     @Test
-    void testEquals() {
-        HashTable<String, Integer> anotherHashTable = new HashTable<>();
-        hashTable.put("one", 1);
-        anotherHashTable.put("one", 1);
-        assertEquals(hashTable, anotherHashTable);
-
-        anotherHashTable.put("two", 2);
-        hashTable.put("two", 2);
-        assertEquals(hashTable, anotherHashTable);
-
-        anotherHashTable.put("three", 3);
-        assertNotEquals(hashTable, anotherHashTable);
+    public void testConcurrentModificationDuringIteration() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        var iterator = hashTable.iterator();
+        hashTable.put("carrot", "vegetable");
+        assertThrows(ConcurrentModificationException.class, () -> iterator.next());
     }
 
     @Test
-    void testToString() {
-        hashTable.put("one", 1);
-        hashTable.put("two", 2);
-        String expected = "{one=[1], two=[2]}";
-        assertEquals(expected, hashTable.toString());
+    public void testResize() {
+        var hashTable = new HashTable<>();
+        for (int i = 0; i < 13; i++) {
+            hashTable.put(i, "value" + i);
+        }
+        assertEquals(32, hashTable.getTable().length);
+        assertEquals(13, hashTable.getSize());
+        assertEquals(24, hashTable.getThreshold());
+    }
+
+    @Test
+    public void testPutWithNullKey() {
+        var hashTable = new HashTable<>();
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, "value"));
+    }
+
+    @Test
+    public void testHashFunction() {
+        var hashTable = new HashTable<>();
+        var key = "apple";
+        int hashIndex = hashTable.hash(key);
+        assertTrue(hashIndex >= 0 && hashIndex < hashTable.getTable().length);
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        var hashTable1 = new HashTable<>();
+        hashTable1.put("apple", "fruit");
+        var hashTable2 = new HashTable<>();
+        hashTable2.put("apple", "fruit");
+        assertEquals(hashTable1, hashTable2);
+        assertEquals(hashTable1.hashCode(), hashTable2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        var hashTable = new HashTable<>();
+        hashTable.put("apple", "fruit");
+        hashTable.put("carrot", "vegetable");
+        var toString = hashTable.toString();
+        assertTrue(toString.contains("apple=fruit"));
+        assertTrue(toString.contains("carrot=vegetable"));
+        assertTrue(toString.startsWith("{") && toString.endsWith("}"));
     }
 }
