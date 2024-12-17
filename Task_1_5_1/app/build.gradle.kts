@@ -6,9 +6,12 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     application
+    java
+    jacoco
+    id("com.diffplug.spotless") version "7.0.0.BETA2"
 }
+
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -20,9 +23,9 @@ dependencies {
     testImplementation(libs.junit.jupiter)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("org.jfree:jfreechart:1.5.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -37,7 +40,30 @@ application {
     mainClass = "org.example.Main"
 }
 
+
+tasks.jacocoTestReport {
+    val reportDir = file("../build/reports/jacoco/test")
+    reports.xml.outputLocation = reportDir.resolve("jacocoTestReport.xml")
+    reports {
+        xml.required = true
+    }
+
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+    finalizedBy(tasks.javadoc)
+}
+
+
+tasks.javadoc {
+    destinationDir = file("../build/docs/javadoc")
+}
+
+spotless {
+    java {
+        googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
+    }
 }

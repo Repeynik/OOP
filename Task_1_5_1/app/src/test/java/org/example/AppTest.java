@@ -3,10 +3,10 @@
  */
 package org.example;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
+import org.example.enums.Alignment;
+import org.junit.jupiter.api.Test;
 
 class AppTest {
     @Test
@@ -22,19 +22,25 @@ class AppTest {
     }
 
     @Test
-    void serializeUnorderedList() {
-        List_M list = new List_M(false);
-        list.addItem("Item 1");
-        list.addItem("Item 2");
-        assertEquals("- Item 1\n- Item 2\n", list.serialize());
+    void testSerializeOrderedList() {
+        List_M orderedList = new List_M(true);
+        orderedList.addItem("First item");
+        orderedList.addItem("Second item");
+        orderedList.addItem("Third item");
+
+        String expected = "1. First item\n2. Second item\n3. Third item\n";
+        assertEquals(expected, orderedList.serialize());
     }
 
     @Test
-    void serializeOrderedList() {
-        List_M list = new List_M(true);
-        list.addItem("Step 1");
-        list.addItem("Step 2");
-        assertEquals("1. Step 1\n2. Step 2\n", list.serialize());
+    void testSerializeUnorderedList() {
+        List_M unorderedList = new List_M(false);
+        unorderedList.addItem("First item");
+        unorderedList.addItem("Second item");
+        unorderedList.addItem("Third item");
+
+        String expected = "- First item\n- Second item\n- Third item\n";
+        assertEquals(expected, unorderedList.serialize());
     }
 
     @Test
@@ -49,21 +55,26 @@ class AppTest {
         assertEquals("### Subsection\n", header.serialize());
     }
 
-    // @Test
-    // void buildTableWithAlignmentAndRowLimit() {
-    //     Table.Builder tableBuilder = new Table.Builder()
-    //             .withAlignments(Alignment.ALIGN_RIGHT, Alignment.ALIGN_LEFT)
-    //             .withRowLimit(2)
-    //             .addRow("Index", "Random")
-    //             .addRow(1, new Text.Bold("8"))
-    //             .addRow(2, "2");
-    //     Table table = tableBuilder.build();
-    //     String expected = "| Index | Random |\n" +
-    //             "| -----:| ------ |\n" +
-    //             "| 1 | **8** |\n" +
-    //             "| 2 | 2 |\n";
-    //     assertEquals(expected, table.serialize());
-    // }
+    @Test
+    void buildTableWithAlignmentAndRowLimit() {
+        Table.Builder tableBuilder =
+                new Table.Builder()
+                        .withAlignments(Alignment.ALIGN_RIGHT, Alignment.ALIGN_LEFT)
+                        .withRowLimit(2)
+                        .addRow("Index", "Random")
+                        .addRow(1, new Text.Bold("8"))
+                        .addRow(2, "2");
+        Table table = tableBuilder.build();
+
+        // Ожидаемый результат с учетом выравнивания и одинаковой ширины ячеек
+        String expected =
+                "| Index | Random | \n"
+                        + "| ----: | :----- | \n"
+                        + "|     1 | **8**  | \n"
+                        + "|     2 | 2      | \n";
+
+        assertEquals(expected, table.serialize());
+    }
 
     @Test
     void testEquals_Text() {
@@ -84,5 +95,47 @@ class AppTest {
         Text text = new Text("Hello");
         Header header = new Header(1, "Hello");
         assertFalse(text.equals(header));
+    }
+
+    @Test
+    void testSerializeQuote() {
+        Quote quote = new Quote("This is a quote");
+        String expected = "> This is a quote\n";
+        assertEquals(expected, quote.serialize());
+    }
+
+    @Test
+    void testSerializeImage() {
+        Image image = new Image("Alt text", "http://example.com/image.png");
+        String expected = "![Alt text](http://example.com/image.png)";
+        assertEquals(expected, image.serialize());
+    }
+
+    @Test
+    void testSerializeWithoutLanguage() {
+        CodeBlock codeBlock = new CodeBlock("print('Hello, World!')");
+        String expected = "```\nprint('Hello, World!')\n```";
+        assertEquals(expected, codeBlock.serialize());
+    }
+
+    @Test
+    void testSerializeWithLanguage() {
+        CodeBlock codeBlock = new CodeBlock("print('Hello, World!')", "python");
+        String expected = "```python\nprint('Hello, World!')\n```";
+        assertEquals(expected, codeBlock.serialize());
+    }
+
+    @Test
+    void testSerializeCompleted() {
+        Task task = new Task(true, "Complete the task");
+        String expected = "[x] Complete the task";
+        assertEquals(expected, task.serialize());
+    }
+
+    @Test
+    void testSerializeNotCompleted() {
+        Task task = new Task(false, "Complete the task");
+        String expected = "[ ] Complete the task";
+        assertEquals(expected, task.serialize());
     }
 }

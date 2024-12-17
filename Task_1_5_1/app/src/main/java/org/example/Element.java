@@ -3,6 +3,7 @@ package org.example;
 // Base Element class
 public abstract class Element {
     public abstract String serialize();
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
