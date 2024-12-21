@@ -1,35 +1,50 @@
 package org.example;
 
-import org.example.enums.Assessment;
-import org.example.enums.AssessmentType;
 import org.example.enums.FormOfStudy;
 import org.example.enums.Grade;
-import org.example.enums.Session;
 
 public class Main {
     public static void main(String[] args) {
-        var recordBook = new StudentRecordBook(FormOfStudy.PAID, 3);
+        var recordBook =
+                new StudentRecordBook(
+                        FormOfStudy.PAID, 3, "John Doe", "Group A", "Faculty of Science");
 
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.EXCELLENT));
-        recordBook.addSession(session1);
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
 
-        var session2 = new Session();
-        session2.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session2.addAssessment(new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.EXCELLENT));
-        recordBook.addSession(session2);
+        recordBook.setGrade(2, "Chemistry", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Biology", Grade.EXCELLENT);
 
-        var session3 = new Session();
-        session3.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session3.addAssessment(new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.EXCELLENT));
-        session3.addAssessment(new Assessment(AssessmentType.CONTROL_WORK, Grade.SATISFACTORY));
-        recordBook.addSession(session3);
+        recordBook.setGrade(3, "History", Grade.EXCELLENT);
+        recordBook.setGrade(3, "Geography", Grade.EXCELLENT);
+        recordBook.setGrade(3, "Literature", Grade.SATISFACTORY);
+
+        recordBook.setGrade(4, "Economics", Grade.EXCELLENT);
+        recordBook.setGrade(4, "Sociology", Grade.EXCELLENT);
+
+        recordBook.setGrade(4, "NonExistentSubject", Grade.EXCELLENT);
+
+        System.out.println("Student Name: " + recordBook.getName());
+        System.out.println("Student Group: " + recordBook.getGroup());
+        System.out.println("Student Faculty: " + recordBook.getFaculty());
 
         System.out.println("Current Average: " + recordBook.getCurrentAverage());
         System.out.println("Can switch to budget: " + recordBook.canSwitchToBudget());
         System.out.println("Can get red diploma: " + recordBook.canGetRedDiploma());
         System.out.println(
                 "Can get increased scholarship: " + recordBook.canGetIncreasedScholarship());
+
+        System.out.println("Assessments:");
+        recordBook.getSessions().stream()
+                .flatMap(session -> session.getAssessments().stream())
+                .forEach(
+                        assessment ->
+                                System.out.println(
+                                        "Subject: "
+                                                + assessment.getSubjectName()
+                                                + ", Grade: "
+                                                + assessment.getGrade()
+                                                + ", Type: "
+                                                + assessment.getType()));
     }
 }

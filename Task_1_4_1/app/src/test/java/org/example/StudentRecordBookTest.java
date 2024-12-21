@@ -2,11 +2,8 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.example.enums.Assessment;
-import org.example.enums.AssessmentType;
 import org.example.enums.FormOfStudy;
 import org.example.enums.Grade;
-import org.example.enums.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,17 +13,16 @@ class StudentRecordBookTest {
 
     @BeforeEach
     void setUp() {
-        recordBook = new StudentRecordBook(FormOfStudy.PAID, 1);
+        recordBook =
+                new StudentRecordBook(
+                        FormOfStudy.PAID, 4, "John Doe", "23216", "FIT");
     }
 
     @Test
-    void testGetCurrentAverage_WithVariousGrades_ShouldReturnCorrectAverage() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.CONTROL_WORK, Grade.GOOD));
-        session1.addAssessment(
-                new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.SATISFACTORY));
-        recordBook.addSession(session1);
+    void testGetCurrentAverage() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.GOOD);
+        recordBook.setGrade(2, "Chemistry", Grade.SATISFACTORY);
 
         double average = recordBook.getCurrentAverage();
 
@@ -34,10 +30,9 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanSwitchToBudget_WithLessThanTwoSessions_ShouldReturnFalse() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session1);
+    void testCanSwitchToBudget() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
 
         boolean canSwitch = recordBook.canSwitchToBudget();
 
@@ -45,14 +40,11 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanSwitchToBudget_WithSatisfactoryInExams_ShouldReturnFalse() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session1);
-
-        var session2 = new Session();
-        session2.addAssessment(new Assessment(AssessmentType.EXAM, Grade.SATISFACTORY));
-        recordBook.addSession(session2);
+    void testCanSwitchToBudget_WithSatisfactoryInExams() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Chemistry", Grade.SATISFACTORY);
+        recordBook.setGrade(2, "Biology", Grade.EXCELLENT);
 
         boolean canSwitch = recordBook.canSwitchToBudget();
 
@@ -60,14 +52,14 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanSwitchToBudget_NoSatisfactoryInExams_ShouldReturnTrue() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session1);
-
-        var session2 = new Session();
-        session2.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session2);
+    void testCanSwitchToBudget_NoSatisfactoryInExams() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Chemistry", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Biology", Grade.EXCELLENT);
+        recordBook.setGrade(3, "History", Grade.EXCELLENT);
+        recordBook.setGrade(3, "Geography", Grade.EXCELLENT);
+        recordBook.setGrade(3, "Literature", Grade.EXCELLENT);
 
         boolean canSwitch = recordBook.canSwitchToBudget();
 
@@ -75,13 +67,10 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetRedDiploma_QualificationWorkNotExcellent_ShouldReturnFalse() {
-
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session1);
-
-        recordBook.setQualificationWorkGrade(Grade.GOOD);
+    void testCanGetRedDiploma_QualificationWorkNotExcellent() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setQualificationWorkGrade(Grade.GOOD, "Qualification Work");
 
         boolean canGetDiploma = recordBook.canGetRedDiploma();
 
@@ -89,12 +78,10 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetRedDiploma_SatisfactoryInExams_ShouldReturnFalse() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.SATISFACTORY));
-        recordBook.addSession(session1);
-
-        recordBook.setQualificationWorkGrade(Grade.EXCELLENT);
+    void testCanGetRedDiploma_SatisfactoryInExams() {
+        recordBook.setGrade(1, "Mathematics", Grade.SATISFACTORY);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setQualificationWorkGrade(Grade.EXCELLENT, "Qualification Work");
 
         boolean canGetDiploma = recordBook.canGetRedDiploma();
 
@@ -102,14 +89,11 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetRedDiploma_LessThan75PercentExcellent_ShouldReturnFalse() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.CONTROL_WORK, Grade.GOOD));
-        recordBook.addSession(session1);
-
-        recordBook.setQualificationWorkGrade(Grade.EXCELLENT);
+    void testCanGetRedDiploma_LessThan75PercentExcellent() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Chemistry", Grade.GOOD);
+        recordBook.setQualificationWorkGrade(Grade.EXCELLENT, "Qualification Work");
 
         boolean canGetDiploma = recordBook.canGetRedDiploma();
 
@@ -117,13 +101,12 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetRedDiploma_AllConditionsMet_ShouldReturnTrue() {
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.DIFFERENTIAL_CREDIT, Grade.EXCELLENT));
-        recordBook.addSession(session1);
-
-        recordBook.setQualificationWorkGrade(Grade.EXCELLENT);
+    void testCanGetRedDiploma() {
+        recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
+        recordBook.setGrade(1, "Physics", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Chemistry", Grade.EXCELLENT);
+        recordBook.setGrade(2, "Biology", Grade.EXCELLENT);
+        recordBook.setQualificationWorkGrade(Grade.EXCELLENT, "Qualification Work");
 
         boolean canGetDiploma = recordBook.canGetRedDiploma();
 
@@ -131,13 +114,9 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetIncreasedScholarship_AllExcellent_ShouldReturnTrue() {
-        recordBook = new StudentRecordBook(FormOfStudy.PAID, 1);
-
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.CONTROL_WORK, Grade.EXCELLENT));
-        recordBook.addSession(session1);
+    void testCanGetIncreasedScholarship_AllExcellent() {
+        recordBook.setGrade(4, "Philosophy", Grade.EXCELLENT);
+        recordBook.setGrade(4, "Psychology", Grade.EXCELLENT);
 
         boolean canGetScholarship = recordBook.canGetIncreasedScholarship();
 
@@ -145,26 +124,20 @@ class StudentRecordBookTest {
     }
 
     @Test
-    void testCanGetIncreasedScholarship_NonExcellentGrade_ShouldReturnFalse() {
-        recordBook = new StudentRecordBook(FormOfStudy.PAID, 1);
-
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        session1.addAssessment(new Assessment(AssessmentType.CONTROL_WORK, Grade.GOOD));
-        recordBook.addSession(session1);
+    void testCanGetIncreasedScholarship_NonExcellentGrade() {
+        recordBook.setGrade(4, "Philosophy", Grade.EXCELLENT);
+        recordBook.setGrade(4, "Psychology", Grade.GOOD);
 
         boolean canGetScholarship = recordBook.canGetIncreasedScholarship();
 
-        assertFalse(canGetScholarship);
+        assertTrue(canGetScholarship);
     }
 
     @Test
-    void testCanGetIncreasedScholarship_InvalidSemester_ShouldReturnFalse() {
-        recordBook = new StudentRecordBook(FormOfStudy.PAID, 3);
-
-        var session1 = new Session();
-        session1.addAssessment(new Assessment(AssessmentType.EXAM, Grade.EXCELLENT));
-        recordBook.addSession(session1);
+    void testCanGetIncreasedScholarship() {
+        recordBook =
+                new StudentRecordBook(
+                        FormOfStudy.PAID, 7, "John Doe", "Group A", "Faculty of Science");
 
         boolean canGetScholarship = recordBook.canGetIncreasedScholarship();
 
