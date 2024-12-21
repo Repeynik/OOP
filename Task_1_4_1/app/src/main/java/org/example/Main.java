@@ -5,9 +5,7 @@ import org.example.enums.Grade;
 
 public class Main {
     public static void main(String[] args) {
-        var recordBook =
-                new StudentRecordBook(
-                        FormOfStudy.PAID, 3, "John Doe", "Group A", "Faculty of Science");
+        var recordBook = new StudentRecordBook(FormOfStudy.PAID, 3, "John Doe", "23216", "FIT");
 
         recordBook.setGrade(1, "Mathematics", Grade.EXCELLENT);
         recordBook.setGrade(1, "Physics", Grade.EXCELLENT);

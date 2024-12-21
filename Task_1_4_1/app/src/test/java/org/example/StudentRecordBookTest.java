@@ -13,9 +13,7 @@ class StudentRecordBookTest {
 
     @BeforeEach
     void setUp() {
-        recordBook =
-                new StudentRecordBook(
-                        FormOfStudy.PAID, 4, "John Doe", "23216", "FIT");
+        recordBook = new StudentRecordBook(FormOfStudy.PAID, 4, "John Doe", "23216", "FIT");
     }
 
     @Test
