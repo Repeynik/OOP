@@ -1,6 +1,9 @@
 package org.example;
 
 public class Parallel {
+    private Parallel() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static boolean primeNumber(int[] array, int numThreads) throws InterruptedException {
         MyAtomicBoolean found = new MyAtomicBoolean(false);

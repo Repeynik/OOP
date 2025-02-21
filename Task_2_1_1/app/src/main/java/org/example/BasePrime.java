@@ -1,6 +1,10 @@
 package org.example;
 
 public abstract class BasePrime {
+    private BasePrime() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static boolean isPrime(int num) {
         if (num < 2) return false;
         for (int j = 2; j <= Math.sqrt(num); j++) {
