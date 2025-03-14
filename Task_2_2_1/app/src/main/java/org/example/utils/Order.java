@@ -1,6 +1,9 @@
-package org.example;
+package org.example.utils;
+
+import org.example.enums.OrderStatus;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 public class Order implements Serializable {
     private final int id;
@@ -11,9 +14,10 @@ public class Order implements Serializable {
         this.status = OrderStatus.QUEUED;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(OrderStatus status, String threadId) {
         this.status = status;
-        System.out.println("[" + id + "] " + status);
+        Logger logger = Logger.getLogger(Order.class.getName());
+        logger.info("[" + id + "] " + status + " on thread " + threadId);
     }
 
     public int getId() {
@@ -23,12 +27,4 @@ public class Order implements Serializable {
     public OrderStatus getStatus() {
         return status;
     }
-}
-
-enum OrderStatus {
-    QUEUED,
-    IN_PROGRESS,
-    ON_STORAGE,
-    DELIVERING,
-    DELIVERED
 }

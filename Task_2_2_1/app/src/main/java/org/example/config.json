@@ -1,5 +1,6 @@
 {
     "storageCapacity": 20,
+    "openTime": 15000,
     "bakers": [
       {"speed": 2000},
       {"speed": 1500},

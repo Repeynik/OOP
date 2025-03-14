@@ -1,4 +1,8 @@
-package org.example;
+package org.example.impl;
+
+import org.example.enums.OrderStatus;
+import org.example.interfaces.OrderQueue;
+import org.example.utils.Order;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,16 +14,16 @@ public class BasicOrderQueue implements OrderQueue {
 
     public synchronized void addOrder(Order order) {
         queue.add(order);
-        order.setStatus(OrderStatus.QUEUED);
+        order.setStatus(OrderStatus.QUEUED, "on_queue");
         notifyAll();
     }
 
-    public synchronized Order takeOrder() throws InterruptedException {
+    public synchronized Order takeOrder(Long threadId) throws InterruptedException {
         while (queue.isEmpty()) {
             wait();
         }
         Order order = queue.poll();
-        order.setStatus(OrderStatus.IN_PROGRESS);
+        order.setStatus(OrderStatus.IN_PROGRESS, Long.toString(threadId));
         return order;
     }
 

@@ -1,4 +1,6 @@
-package org.example;
+package org.example.interfaces;
+
+import org.example.utils.Order;
 
 import java.util.List;
 

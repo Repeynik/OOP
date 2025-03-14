@@ -1,4 +1,8 @@
-package org.example;
+package org.example.impl;
+
+import org.example.enums.OrderStatus;
+import org.example.interfaces.Storage;
+import org.example.utils.Order;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,11 +22,11 @@ public class LimitedStorage implements Storage {
             wait();
         }
         orders.add(order);
-        order.setStatus(OrderStatus.ON_STORAGE);
+        order.setStatus(OrderStatus.ON_STORAGE, "on_storage");
         notifyAll();
     }
 
-    public synchronized List<Order> takePizzas(int max) throws InterruptedException {
+    public synchronized List<Order> takePizzas(int max, Long threadId) throws InterruptedException {
         while (orders.isEmpty()) {
             wait();
         }
@@ -30,7 +34,7 @@ public class LimitedStorage implements Storage {
         int count = Math.min(max, orders.size());
         for (int i = 0; i < count; i++) {
             Order order = orders.poll();
-            order.setStatus(OrderStatus.DELIVERING);
+            order.setStatus(OrderStatus.DELIVERING, Long.toString(threadId));
             taken.add(order);
         }
         notifyAll();

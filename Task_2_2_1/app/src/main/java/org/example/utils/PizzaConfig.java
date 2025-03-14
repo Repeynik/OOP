@@ -1,9 +1,10 @@
-package org.example;
+package org.example.utils;
 
 import java.util.List;
 
 public class PizzaConfig {
     private int storageCapacity;
+    private int openTime;
     private List<BakerConfig> bakers;
     private List<CourierConfig> couriers;
 
@@ -13,6 +14,14 @@ public class PizzaConfig {
 
     public void setStorageCapacity(int storageCapacity) {
         this.storageCapacity = storageCapacity;
+    }
+
+    public int getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(int openTime) {
+        this.openTime = openTime;
     }
 
     public List<BakerConfig> getBakers() {
@@ -29,29 +38,5 @@ public class PizzaConfig {
 
     public void setCouriers(List<CourierConfig> couriers) {
         this.couriers = couriers;
-    }
-}
-
-class BakerConfig {
-    private int speed;
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-}
-
-class CourierConfig {
-    private int trunkCapacity;
-
-    public int getTrunkCapacity() {
-        return trunkCapacity;
-    }
-
-    public void setTrunkCapacity(int trunkCapacity) {
-        this.trunkCapacity = trunkCapacity;
     }
 }

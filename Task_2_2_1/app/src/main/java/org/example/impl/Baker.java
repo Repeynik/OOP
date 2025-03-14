@@ -1,4 +1,9 @@
-package org.example;
+package org.example.impl;
+
+import org.example.interfaces.OrderQueue;
+import org.example.interfaces.Storage;
+import org.example.interfaces.Worker;
+import org.example.utils.Order;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +24,7 @@ public class Baker implements Worker {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                currentOrder = orderQueue.takeOrder();
+                currentOrder = orderQueue.takeOrder(Thread.currentThread().threadId());
                 Thread.sleep(speed);
                 storage.putPizza(currentOrder);
                 currentOrder = null;
@@ -34,9 +39,5 @@ public class Baker implements Worker {
         return currentOrder != null
                 ? Collections.singletonList(currentOrder)
                 : Collections.emptyList();
-    }
-
-    public Order getCurrentOrder() {
-        return currentOrder;
     }
 }

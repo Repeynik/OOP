@@ -1,0 +1,169 @@
+@startuml
+!theme plain
+
+class PizzaRestaurant {
+  - orderQueue: OrderQueue
+  - storage: Storage
+  - workers: List<Worker>
+  - courierThreads: List<Thread>
+  - bakerThreads: List<Thread>
+  - orderGeneratorThread: Thread
+  - configLoader: PizzaConfigLoader
+  + PizzaRestaurant(PizzaConfigLoader)
+  + start(): void
+  - registerWorker(Worker): void
+  - startOrderGenerator(): void
+  - shutdown(): void
+  - serializePendingOrders(): List<Order>
+}
+
+class PizzaSimulation {
+  + main(args: String[]): void
+}
+
+interface PizzaConfigLoader {
+  + loadConfig(): PizzaConfig
+}
+
+class JsonConfigLoader {
+  - configPath: String
+  + JsonConfigLoader(configPath: String)
+  + loadConfig(): PizzaConfig
+}
+
+class PizzaConfig {
+  - storageCapacity: int
+  - bakers: List<BakerConfig>
+  - couriers: List<CourierConfig>
+  - openTime: int
+  + getStorageCapacity(): int
+  + getBakers(): List<BakerConfig>
+  + getCouriers(): List<CourierConfig>
+  + setStorageCapacity(int): void
+  + setCouriers(List<CourierConfig>): void
+  + setBakers(List<BakerConfig>): void
+  + setOpenTime(int): void
+}
+
+class BakerConfig {
+  - speed: int
+  + getSpeed(): int
+  + setSpeed(int): void
+}
+
+class CourierConfig {
+  - trunkCapacity: int
+  + getTrunkCapacity(): int
+  + setTrunkCapacity(int): void
+}
+
+interface OrderQueue {
+  + addOrder(Order): void
+  + takeOrder(int): Order
+  + getRemainingOrders(): List<Order>
+}
+
+class BasicOrderQueue {
+  - queue: Queue<Order>
+  + addOrder(Order): void
+  + takeOrder(int): Order
+  + getRemainingOrders(): List<Order>
+}
+
+interface Storage {
+  + putPizza(Order): void
+  + takePizzas(int, int): Order
+  + getRemainingPizzas(): List<Order>
+}
+
+class LimitedStorage {
+  - capacity: int
+  - orders: Queue<Order>
+  + LimitedStorage(capacity: int)
+  + putPizza(Order): void
+  + takePizzas(int, int): Order
+  + getRemainingPizzas(): List<Order>
+}
+
+interface Worker {
+  + getCurrentOrders(): List<Order>
+}
+
+class Baker {
+  - speed: int
+  - orderQueue: OrderQueue
+  - storage: Storage
+  - currentOrder: Order
+  + Baker(speed: int, orderQueue: OrderQueue, storage: Storage)
+  + run(): void
+  + getCurrentOrders(): List<Order>
+}
+
+class Courier {
+  - trunkCapacity: int
+  - storage: Storage
+  - currentOrders: List<Order>
+  + Courier(trunkCapacity: int, storage: Storage)
+  + run(): void
+  + getCurrentOrders(): List<Order>
+}
+
+
+class Order {
+  - id: int
+  - status: OrderStatus
+  + Order(id: int, status: OrderStatus)
+  + getId(): int
+  + getStatus(): OrderStatus
+  + setStatus(status: OrderStatus, threadId: String): void
+}
+
+enum OrderStatus {
+  QUEUED
+  IN_PROGRESS
+  ON_STORAGE
+  DELIVERING
+  DELIVERED
+}
+
+
+' Связи и зависимости
+PizzaRestaurant --> PizzaConfigLoader : depends
+PizzaRestaurant *-- OrderQueue : composition
+PizzaRestaurant *-- Storage : composition
+PizzaRestaurant o-- Worker : aggregation
+
+PizzaSimulation --> PizzaRestaurant : creates
+PizzaSimulation --> JsonConfigLoader : creates
+
+JsonConfigLoader ..|> PizzaConfigLoader : implements
+BasicOrderQueue ..|> OrderQueue : implements
+LimitedStorage ..|> Storage : implements
+Baker ..|> Worker : implements
+Courier ..|> Worker : implements
+
+PizzaConfigLoader --> PizzaConfig : creates
+
+Baker --> OrderQueue : uses
+Baker --> Storage : uses
+Courier --> Storage : uses
+
+PizzaRestaurant --> PizzaConfig : uses
+PizzaRestaurant --> BakerConfig : uses
+PizzaRestaurant --> CourierConfig : uses
+
+Order --> OrderStatus : uses
+
+BasicOrderQueue --> Order : uses
+BasicOrderQueue --> OrderStatus : uses
+
+LimitedStorage --> Order : uses
+LimitedStorage --> OrderStatus : uses
+
+Courier --> Order : uses
+Courier --> OrderStatus : uses
+
+Baker --> Order : uses
+Baker --> OrderStatus : uses
+
+@enduml
