@@ -64,8 +64,8 @@ tasks.javadoc {
     destinationDir = file("../build/docs/javadoc")
 }
 
-spotless {
-    java {
-        googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
-    }
-}
+// spotless {
+//     java {
+//         googleJavaFormat().aosp().reflowLongStrings().formatJavadoc(true).reorderImports(true)
+//     }
+// }
