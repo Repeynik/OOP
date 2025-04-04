@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 class PizzaRestaurantTestIntegrationTest {
     private static final String LOG_FILE = "log.file";
 
-
     @Test
     void testOrderLifecycle() throws Exception {
 
