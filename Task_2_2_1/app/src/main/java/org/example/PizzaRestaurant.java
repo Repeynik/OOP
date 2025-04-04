@@ -64,19 +64,8 @@ public class PizzaRestaurant {
     }
 
     private void startOrderGenerator() {
-        orderGeneratorThread =
-                new Thread(
-                        () -> {
-                            int orderId = 1;
-                            while (!Thread.currentThread().isInterrupted()) {
-                                orderQueue.addOrder(new Order(orderId++));
-                                try {
-                                    Thread.sleep(500);
-                                } catch (InterruptedException e) {
-                                    Thread.currentThread().interrupt();
-                                }
-                            }
-                        });
+        OrderGenerator orderGenerator = new OrderGenerator(orderQueue);
+        orderGeneratorThread = new Thread(orderGenerator);
         orderGeneratorThread.start();
     }
 

@@ -32,4 +32,21 @@ class CourierTest {
         assertEquals(OrderStatus.DELIVERED, order2.getStatus());
         courierThread.interrupt();
     }
+
+    @Test
+    void testFewCouriersDeliverOrders() throws InterruptedException {
+        Order order1 = new Order(1);
+        Order order2 = new Order(2);
+        storage.putPizza(order1);
+        storage.putPizza(order2);
+        Thread courierThread1 = new Thread(courier);
+        Thread courierThread2 = new Thread(new Courier(3, storage));
+        courierThread1.start();
+        courierThread2.start();
+        Thread.sleep(2000);
+        assertEquals(OrderStatus.DELIVERED, order1.getStatus());
+        assertEquals(OrderStatus.DELIVERED, order2.getStatus());
+        courierThread1.interrupt();
+        courierThread2.interrupt();
+    }
 }

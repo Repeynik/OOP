@@ -32,4 +32,35 @@ class BakerTest {
         assertEquals(OrderStatus.ON_STORAGE, order.getStatus());
         bakerThread.interrupt();
     }
+
+    @Test
+    void testFewBakersProcessOrder() throws InterruptedException {
+        Order order = new Order(1);
+        orderQueue.addOrder(order);
+        Thread bakerThread1 = new Thread(baker);
+        Thread bakerThread2 = new Thread(new Baker(1000, orderQueue, storage));
+        bakerThread1.start();
+        bakerThread2.start();
+        Thread.sleep(1500);
+        assertEquals(OrderStatus.ON_STORAGE, order.getStatus());
+        bakerThread1.interrupt();
+        bakerThread2.interrupt();
+    }
+
+    @Test
+    void testFewBakersFewOrders() throws InterruptedException {
+        Order order1 = new Order(1);
+        Order order2 = new Order(2);
+        orderQueue.addOrder(order1);
+        orderQueue.addOrder(order2);
+        Thread bakerThread1 = new Thread(baker);
+        Thread bakerThread2 = new Thread(new Baker(1000, orderQueue, storage));
+        bakerThread1.start();
+        bakerThread2.start();
+        Thread.sleep(1500);
+        assertEquals(OrderStatus.ON_STORAGE, order1.getStatus());
+        assertEquals(OrderStatus.ON_STORAGE, order2.getStatus());
+        bakerThread1.interrupt();
+        bakerThread2.interrupt();
+    }
 }
