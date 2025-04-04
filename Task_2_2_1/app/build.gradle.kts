@@ -9,7 +9,7 @@ plugins {
     application
     java
     jacoco
-    id("com.diffplug.spotless") version "7.0.0.BETA2"
+    // id("com.diffplug.spotless") version "7.0.0.BETA2"
 }
 
 
