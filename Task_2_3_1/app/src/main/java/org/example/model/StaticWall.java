@@ -6,8 +6,7 @@ public class StaticWall extends Obstacle {
     }
 
     @Override
-    public void update() {
-    }
+    public void update() {}
 
     @Override
     public boolean isStatic() {

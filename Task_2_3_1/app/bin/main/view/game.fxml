@@ -10,18 +10,16 @@
            fx:controller="org.example.controller.GameController"
            style="-fx-background-color: black;">
 
-    <!-- Основные игровые элементы -->
     <Canvas fx:id="gameCanvas" width="600" height="400"/>
     
     <Label fx:id="scoreLabel" text="Score: 0" 
            style="-fx-font-family: 'Arial'; -fx-font-size: 20px; -fx-text-fill: white;"
            StackPane.alignment="TOP_LEFT"/>
 
-    <Label fx:id="obstaclesLabel" text="Obstacles: 5" 
+    <Label fx:id="obstaclesLabel" text="Obstacles: 0" 
         style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-text-fill: white;"
         StackPane.alignment="TOP_RIGHT"/>
-
-    <!-- Группа элементов Game Over -->
+        
     <VBox alignment="CENTER" spacing="20" visible="false" fx:id="gameOverGroup">
         <Label text="GAME OVER" 
                style="-fx-font-family: 'Arial'; -fx-font-size: 40px; -fx-text-fill: red;"/>
@@ -40,7 +38,6 @@
         </Button>
     </VBox>
 
-    <!-- Группа элементов Victory -->
     <VBox alignment="CENTER" spacing="20" visible="false" fx:id="victoryGroup">
         <Label text="YOU WIN!" 
                style="-fx-font-family: 'Arial'; -fx-font-size: 40px; -fx-text-fill: green;"/>
@@ -59,6 +56,9 @@
         </Button>
     </VBox>
 
-    
+    <Button text="Level Editor" 
+            onAction="#openLevelEditor"
+            style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-background-color: #FF9800; -fx-text-fill: white;"
+            StackPane.alignment="BOTTOM_RIGHT"/>
 
 </StackPane>

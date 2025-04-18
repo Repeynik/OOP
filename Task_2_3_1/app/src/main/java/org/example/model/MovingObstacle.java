@@ -4,20 +4,19 @@ import java.util.Random;
 
 public class MovingObstacle extends Obstacle {
     private Direction direction;
-    private final int moveSpeed = 2; 
     private final Random rand = new Random();
-    private int moveCounter = 0;
-    private final int gameWidth = 600; 
-    private final int gameHeight = 400;
+    private final int gameWidth;
+    private final int gameHeight;
 
-    public MovingObstacle(Point position) {
+    public MovingObstacle(Point position, int gameWidth, int gameHeight) {
         super(position);
+        this.gameWidth = gameWidth;
+        this.gameHeight = gameHeight;
         this.direction = Direction.values()[rand.nextInt(4)];
     }
 
     @Override
     public void update() {
-
         position = new Point(position.x + direction.dx, position.y + direction.dy);
 
         if (position.x <= 0 || position.x >= gameWidth - 1) {

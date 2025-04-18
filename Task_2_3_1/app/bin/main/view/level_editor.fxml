@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controller.LevelEditorController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20; -fx-pref-width: 1000; -fx-pref-height: 800;">
+    <Label text="Level Editor" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="Level Number:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="levelNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Enter level number"/>
+
+        <Label text="Enemy Count:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="enemyCountField" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Enter enemy count"/>
+
+        <Label text="Obstacle Count:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="obstacleCountField" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Enter obstacle count"/>
+
+        <Label text="Snake Speed (ms):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="snakeSpeedField" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="Enter snake speed"/>
+
+        <Label text="Game Speed: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="gameSpeedField" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="Enter game speed"/>
+
+        <Label text="Target Length:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <TextField fx:id="targetLengthField" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Enter target length"/>
+
+        <Label text="Enable Acceleration:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <CheckBox fx:id="accelerationCheckBox" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+        <Label text="Snake Behavior:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+        <ChoiceBox fx:id="snakeBehaviorChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+        <Label text="Enable Second Snake:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+        <CheckBox fx:id="secondSnakeCheckBox" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+        <Button text="Save Config" 
+                onAction="#saveConfigToJson"
+                style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white;"
+                GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+
+        <Button text="Load Config" 
+                onAction="#loadConfigFromFile"
+                style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-background-color: #2196F3; -fx-text-fill: white;"
+                GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+        <Button text="Save Level" 
+                onAction="#handleSaveLevel"
+                style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-background-color: #2120F3; -fx-text-fill: white;"
+                GridPane.columnIndex="2" GridPane.rowIndex="9"/>
+
+        <Button text="Cancel" 
+                onAction="#handleCancel"
+                style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-background-color: #1196F3; -fx-text-fill: white;"
+                GridPane.columnIndex="3" GridPane.rowIndex="9"/>
+    </GridPane>
+</VBox>
