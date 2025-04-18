@@ -1,0 +1,12 @@
+Apr 04, 2025 12:32:07 PM org.example.utils.Order setStatus
+INFO: [1] ON_STORAGE on thread on_storage
+Apr 04, 2025 12:32:07 PM org.example.utils.Order setStatus
+INFO: [2] ON_STORAGE on thread on_storage
+Apr 04, 2025 12:32:07 PM org.example.utils.Order setStatus
+INFO: [1] DELIVERING on thread 22
+Apr 04, 2025 12:32:07 PM org.example.utils.Order setStatus
+INFO: [2] DELIVERING on thread 22
+Apr 04, 2025 12:32:08 PM org.example.utils.Order setStatus
+INFO: [1] DELIVERED on thread 22
+Apr 04, 2025 12:32:08 PM org.example.utils.Order setStatus
+INFO: [2] DELIVERED on thread 22

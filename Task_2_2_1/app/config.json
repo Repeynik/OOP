@@ -1,0 +1,14 @@
+{
+    "storageCapacity": 20,
+    "openTime": 15000,
+    "bakers": [
+      {"speed": 2000},
+      {"speed": 1500},
+      {"speed": 2500}
+    ],
+    "couriers": [
+      {"trunkCapacity": 3},
+      {"trunkCapacity": 5},
+      {"trunkCapacity": 4}
+    ]
+}
