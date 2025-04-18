@@ -57,7 +57,7 @@ public class GameController {
                         (int) (gameCanvas.getWidth() / CELL_SIZE),
                         (int) (gameCanvas.getHeight() / CELL_SIZE),
                         config);
-        gameLoop.setRate(1000.0 / config.getGameSpeed());
+        gameLoop.setRate(config.getGameSpeed());
         resetGame();
     }
 
@@ -297,7 +297,7 @@ public class GameController {
                             (int) (gameCanvas.getWidth() / CELL_SIZE),
                             (int) (gameCanvas.getHeight() / CELL_SIZE),
                             selectedLevel);
-            gameLoop.setRate(1000.0 / selectedLevel.getGameSpeed());
+            gameLoop.setRate(selectedLevel.getGameSpeed());
             resetGame();
             showSuccessMessage();
         }
