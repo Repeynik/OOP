@@ -1,4 +1,7 @@
-package org.example.model;
+package org.example.model.snakesModel;
+
+import org.example.model.additionalModels.Direction;
+import org.example.model.additionalModels.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +15,33 @@ public class Snake {
     private long lastMoveTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
     private boolean accelerationEnabled = false;
+    private boolean alive = true;
 
     public Snake(Point startPosition, int initialSpeed) {
         this.initialSpeed = initialSpeed;
         body = new ArrayList<>();
         body.add(startPosition);
         direction = Direction.RIGHT;
+        alive = true;
     }
 
     public void setDirection(Direction newDirection) {
-        if (direction.isOpposite(newDirection)) return;
+        if (direction.isOpposite(newDirection) || isTurningBack(newDirection)) return;
         direction = newDirection;
+    }
+
+    private boolean isTurningBack(Direction newDirection) {
+        Point head = getHead();
+        Point nextPosition = new Point(head.x + newDirection.dx, head.y + newDirection.dy);
+        return body.size() > 1 && nextPosition.equals(body.get(1));
+    }
+
+    public void shrink() {
+        body.remove(body.size() - 1);
+    }
+
+    public void shrinkAll() {
+        body.clear();
     }
 
     public void enableAcceleration(boolean enabled) {
@@ -62,6 +81,10 @@ public class Snake {
         return body.get(0);
     }
 
+    public Point getTail() {
+        return body.get(body.size() - 1);
+    }
+
     public List<Point> getBody() {
         return new ArrayList<>(body);
     }
@@ -84,5 +107,13 @@ public class Snake {
 
     public void setInitialSpeed(int initialSpeed) {
         this.initialSpeed = initialSpeed;
+    }
+
+    public boolean getAlive() {
+        return this.alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

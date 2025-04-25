@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import org.example.model.LevelConfig;
+import org.example.model.configModel.LevelConfig;
 
 import java.io.File;
 import java.io.IOException;

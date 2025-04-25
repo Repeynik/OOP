@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.additionalModels;
 
 public class Food {
     private Point position;

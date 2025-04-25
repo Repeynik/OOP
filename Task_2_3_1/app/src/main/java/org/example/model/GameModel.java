@@ -1,5 +1,16 @@
 package org.example.model;
 
+import org.example.model.additionalModels.Food;
+import org.example.model.additionalModels.Point;
+import org.example.model.configModel.LevelConfig;
+import org.example.model.managers.EnemyCollisionHandler;
+import org.example.model.managers.FieldManager;
+import org.example.model.obstaclesModel.MovingObstacle;
+import org.example.model.obstaclesModel.Obstacle;
+import org.example.model.obstaclesModel.StaticWall;
+import org.example.model.snakesModel.EnemySnake;
+import org.example.model.snakesModel.Snake;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -19,7 +30,9 @@ public class GameModel {
     private boolean secondSnakeEnabled;
 
     private List<EnemySnake> enemySnakes = new ArrayList<>();
-    private Set<Point> freeCells;
+    private FieldManager fieldManager;
+
+    private EnemyCollisionHandler enemyCollisionHandler;
 
     public GameModel(int width, int height, LevelConfig config) {
         this.width = width;
@@ -31,26 +44,24 @@ public class GameModel {
             this.playerSnake2 = new Snake(new Point(width / 4, height / 4), config.getSnakeSpeed());
         }
         this.foods = new ArrayList<>();
-        this.freeCells = new HashSet<>();
         this.behavior = config.getBehavior();
+        this.enemyCollisionHandler = new EnemyCollisionHandler();
+        this.fieldManager = new FieldManager(width, height);
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                freeCells.add(new Point(x, y));
-            }
-        }
         obstacleCount = config.getObstacleCount();
-        updateOccupiedCells();
+        fieldManager.updateOccupiedCells(
+                playerSnake, playerSnake2, foods, obstacles, enemySnakes, secondSnakeEnabled);
         IntStream.range(0, config.getObstacleCount()).forEach(i -> addObstacle());
         IntStream.range(0, config.getEnemyCount()).forEach(i -> addEnemy());
         IntStream.range(0, 3).forEach(i -> addFood());
     }
 
     private void addObstacle() {
-        updateOccupiedCells();
+        fieldManager.updateOccupiedCells(
+                playerSnake, playerSnake2, foods, obstacles, enemySnakes, secondSnakeEnabled);
 
-        if (!freeCells.isEmpty()) {
-            List<Point> freeCellsList = new ArrayList<>(freeCells);
+        if (!fieldManager.getFreeCells().isEmpty()) {
+            List<Point> freeCellsList = new ArrayList<>(fieldManager.getFreeCells());
             Point startPoint = freeCellsList.get(rand.nextInt(freeCellsList.size()));
 
             if (rand.nextBoolean()) {
@@ -59,9 +70,9 @@ public class GameModel {
                 int obstacleSize = rand.nextInt(5) + 1;
                 for (int i = 0; i < obstacleSize; i++) {
                     Point newPoint = new Point(startPoint.x + i, startPoint.y);
-                    if (freeCells.contains(newPoint)) {
+                    if (fieldManager.getFreeCells().contains(newPoint)) {
                         obstacles.add(new StaticWall(newPoint));
-                        freeCells.remove(newPoint);
+                        fieldManager.getFreeCells().remove(newPoint);
                     } else {
                         break;
                     }
@@ -71,38 +82,22 @@ public class GameModel {
     }
 
     private void addEnemy() {
-        updateOccupiedCells();
+        fieldManager.updateOccupiedCells(
+                playerSnake, playerSnake2, foods, obstacles, enemySnakes, secondSnakeEnabled);
 
-        if (!freeCells.isEmpty()) {
-            List<Point> freeCellsList = new ArrayList<>(freeCells);
+        if (!fieldManager.getFreeCells().isEmpty()) {
+            List<Point> freeCellsList = new ArrayList<>(fieldManager.getFreeCells());
             Point newPoint = freeCellsList.get(rand.nextInt(freeCellsList.size()));
             enemySnakes.add(new EnemySnake(newPoint, 200, this.behavior));
         }
     }
 
-    private void updateOccupiedCells() {
-        freeCells.clear();
+    public void addFood() {
+        fieldManager.updateOccupiedCells(
+                playerSnake, playerSnake2, foods, obstacles, enemySnakes, secondSnakeEnabled);
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                freeCells.add(new Point(x, y));
-            }
-        }
-
-        playerSnake.getBody().forEach(freeCells::remove);
-        if (secondSnakeEnabled) {
-            playerSnake2.getBody().forEach(freeCells::remove);
-        }
-        foods.forEach(food -> freeCells.remove(food.getPosition()));
-        obstacles.forEach(obstacle -> freeCells.remove(obstacle.getPosition()));
-        enemySnakes.forEach(enemy -> enemy.getBody().forEach(freeCells::remove));
-    }
-
-    void addFood() {
-        updateOccupiedCells();
-
-        if (!freeCells.isEmpty()) {
-            List<Point> freeCellsList = new ArrayList<>(freeCells);
+        if (!fieldManager.getFreeCells().isEmpty()) {
+            List<Point> freeCellsList = new ArrayList<>(fieldManager.getFreeCells());
             Point newPoint = freeCellsList.get(rand.nextInt(freeCellsList.size()));
             foods.add(new Food(newPoint));
         }
@@ -111,7 +106,13 @@ public class GameModel {
     public void update() {
         if (gameOver || gameWon) return;
 
-        obstacles.forEach(Obstacle::update);
+        obstacles.forEach(
+                obstacle -> {
+                    if (obstacle.isStatic()) {
+                        return;
+                    }
+                    obstacle.update(this);
+                });
 
         updateSnake(playerSnake);
 
@@ -136,7 +137,6 @@ public class GameModel {
 
         if (isOutOfBounds(newHead)
                 || snake.getBody().contains(newHead)
-                || obstacles.stream().anyMatch(o -> o.getPosition().equals(newHead))
                 || enemySnakes.stream().anyMatch(e -> e.getBody().contains(newHead))
                 || (snake == playerSnake
                         && secondSnakeEnabled
@@ -146,7 +146,23 @@ public class GameModel {
             return;
         }
 
-        if (obstacles.stream().anyMatch(o -> !o.isStatic() && o.getPosition().equals(newHead))) {
+        // Проверка столкновения с двигающимся препятствием по всей длине
+        boolean collisionWithMovingObstacle =
+                obstacles.stream()
+                        .filter(o -> !o.isStatic() && o instanceof MovingObstacle)
+                        .flatMap(o -> ((MovingObstacle) o).getOccupiedPoints().stream())
+                        .anyMatch(p -> p.equals(newHead) || snake.getBody().contains(p));
+
+        if (collisionWithMovingObstacle) {
+            snake.shrink();
+
+            if (snake.getBody().isEmpty() && snake == playerSnake) {
+                gameOver = true;
+            }
+            return;
+        }
+
+        if (obstacles.stream().anyMatch(o -> o.getPosition().equals(newHead))) {
             gameOver = true;
             return;
         }
@@ -167,14 +183,9 @@ public class GameModel {
     public void updateEnemySnakes() {
         if (gameOver || gameWon) return;
 
-        enemySnakes.forEach(
-                enemy -> {
-                    enemy.updateDirection(this);
-                    enemy.move();
-                    checkEnemyCollisions(enemy);
-                });
+        List<EnemySnake> enemySnakesCopy = new ArrayList<>(enemySnakes);
 
-        enemySnakes.forEach(
+        enemySnakesCopy.forEach(
                 enemy -> {
                     foods.stream()
                             .filter(food -> food.getPosition().equals(enemy.getHead()))
@@ -187,41 +198,25 @@ public class GameModel {
                                         addFood();
                                     });
                 });
+
+        enemySnakesCopy.forEach(
+                enemy -> {
+                    enemy.updateDirection(this);
+                    enemy.move();
+                    checkEnemyCollisions(enemy);
+                });
     }
 
     private void checkEnemyCollisions(EnemySnake enemy) {
-        Point enemyHead = enemy.getHead();
-
-        if (obstacles.stream().anyMatch(o -> o.getPosition().equals(enemyHead))) {
-            enemySnakes.remove(enemy);
-            return;
-        }
-
-        enemySnakes.forEach(
-                other -> {
-                    if (other != enemy && other.getBody().contains(enemyHead)) {
-                        enemySnakes.remove(enemy);
-                    }
-                });
-
-        if (playerSnake.getBody().contains(enemyHead)
-                || (secondSnakeEnabled && playerSnake2.getBody().contains(enemyHead))) {
-            enemySnakes.remove(enemy);
-        }
-
-        if (enemyHead.equals(playerSnake.getHead())
-                || (secondSnakeEnabled && enemyHead.equals(playerSnake2.getHead()))) {
-            gameOver = true;
-            return;
-        }
-
-        if (enemy.isSelfCollision()) {
-            enemySnakes.remove(enemy);
-        }
-
-        if (isOutOfBounds(enemyHead)) {
-            enemySnakes.remove(enemy);
-        }
+        enemyCollisionHandler.checkCollisions(
+                enemy,
+                playerSnake,
+                playerSnake2,
+                obstacles,
+                enemySnakes,
+                secondSnakeEnabled,
+                fieldManager.getFreeCells(),
+                this);
     }
 
     private boolean isOutOfBounds(Point p) {
@@ -284,5 +279,13 @@ public class GameModel {
 
     public boolean isSecondSnakeEnabled() {
         return secondSnakeEnabled;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public FieldManager getFieldManager() {
+        return fieldManager;
     }
 }

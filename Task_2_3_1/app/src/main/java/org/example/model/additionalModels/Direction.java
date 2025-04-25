@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.additionalModels;
 
 public enum Direction {
     UP(0, -1),
@@ -18,21 +18,15 @@ public enum Direction {
         return this.dx == -other.dx && this.dy == -other.dy;
     }
 
-    boolean isHorizontal() {
-        if (this == LEFT || this == RIGHT) {
-            return true;
-        }
-        return false;
+    public boolean isHorizontal() {
+        return this == LEFT || this == RIGHT;
     }
 
-    boolean isVertical() {
-        if (this == UP || this == DOWN) {
-            return true;
-        }
-        return false;
+    public boolean isVertical() {
+        return this == UP || this == DOWN;
     }
 
-    Direction opposite() {
+    public Direction opposite() {
         switch (this) {
             case UP:
                 return DOWN;

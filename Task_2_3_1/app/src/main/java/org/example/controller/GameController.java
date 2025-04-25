@@ -20,10 +20,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import org.example.model.Direction;
 import org.example.model.GameModel;
-import org.example.model.LevelConfig;
-import org.example.model.Point;
+import org.example.model.additionalModels.*;
+import org.example.model.configModel.LevelConfig;
+import org.example.model.obstaclesModel.MovingObstacle;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class GameController {
                         (int) (gameCanvas.getWidth() / CELL_SIZE),
                         (int) (gameCanvas.getHeight() / CELL_SIZE),
                         config);
-        gameLoop.setRate(config.getGameSpeed());
+        gameLoop.setRate(1000.0 / config.getGameSpeed());
         resetGame();
     }
 
@@ -138,13 +138,27 @@ public class GameController {
                 .getObstacles()
                 .forEach(
                         obstacle -> {
-                            Point p = obstacle.getPosition();
                             if (obstacle.isStatic()) {
+                                Point p = obstacle.getPosition();
                                 gc.setFill(Color.DARKGRAY);
                                 gc.fillRect(p.x * CELL_SIZE, p.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-                            } else {
+                            } else if (obstacle instanceof MovingObstacle) {
                                 gc.setFill(Color.YELLOW);
-                                gc.fillOval(p.x * CELL_SIZE, p.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                                ((MovingObstacle) obstacle)
+                                        .getOccupiedPoints()
+                                        .forEach(
+                                                p -> {
+                                                    gc.clearRect(
+                                                            p.x * CELL_SIZE,
+                                                            p.y * CELL_SIZE,
+                                                            CELL_SIZE,
+                                                            CELL_SIZE);
+                                                    gc.fillOval(
+                                                            p.x * CELL_SIZE + CELL_SIZE * 0.1,
+                                                            p.y * CELL_SIZE + CELL_SIZE * 0.1,
+                                                            CELL_SIZE * 0.8,
+                                                            CELL_SIZE * 0.8);
+                                                });
                             }
                         });
 
@@ -297,7 +311,7 @@ public class GameController {
                             (int) (gameCanvas.getWidth() / CELL_SIZE),
                             (int) (gameCanvas.getHeight() / CELL_SIZE),
                             selectedLevel);
-            gameLoop.setRate(selectedLevel.getGameSpeed());
+            gameLoop.setRate(1000.0 / selectedLevel.getGameSpeed());
             resetGame();
             showSuccessMessage();
         }

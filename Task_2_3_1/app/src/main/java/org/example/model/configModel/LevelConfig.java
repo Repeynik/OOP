@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.configModel;
 
 public class LevelConfig {
     private final int levelNumber;
@@ -19,7 +19,7 @@ public class LevelConfig {
         this.gameSpeed = 200;
         this.targetLength = 10;
         this.accelerationEnabled = false;
-        this.behavior = "Random";
+        this.behavior = "Smart";
         this.secondSnakeEnabled = false;
     }
 
