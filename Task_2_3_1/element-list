@@ -1,0 +1,9 @@
+org.example
+org.example.controller
+org.example.model
+org.example.model.additionalModels
+org.example.model.AiStrategies
+org.example.model.configModel
+org.example.model.managers
+org.example.model.obstaclesModel
+org.example.model.snakesModel
