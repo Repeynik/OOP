@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"org.task_1","c":"HeapSort","l":"HeapSort()","u":"%3Cinit%3E()"},{"p":"org.task_1","c":"HeapSort","l":"heapSort(int[])"},{"p":"org.task_1","c":"Main","l":"Main()","u":"%3Cinit%3E()"},{"p":"org.task_1","c":"Main","l":"main(String[])","u":"main(java.lang.String[])"}];updateSearchResults();
