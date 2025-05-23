@@ -16,10 +16,11 @@ public class ActivityAnalyzer {
         processBuilder.directory(new File(repoPath));
         Process process = processBuilder.start();
 
-        var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         int commitCount = 0;
-        while (reader.readLine() != null) {
-            commitCount++;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            while (reader.readLine() != null) {
+                commitCount++;
+            }
         }
 
         int exitCode = process.waitFor();
@@ -37,8 +38,10 @@ public class ActivityAnalyzer {
         processBuilder.directory(new File(repoPath));
         Process process = processBuilder.start();
 
-        var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String lastCommitDate = reader.readLine();
+        String lastCommitDate;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            lastCommitDate = reader.readLine();
+        }
 
         int exitCode = process.waitFor();
         if (exitCode != 0) {

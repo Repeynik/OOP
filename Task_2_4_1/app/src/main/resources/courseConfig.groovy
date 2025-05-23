@@ -1,7 +1,7 @@
 tasks = [
     [
-        id: 'Task_1_1',
-        name: 'Task_1_1',
+        id: 'Task_1_1_1',
+        name: 'Task_1_1_1',
         maxPoints: 1,
         softDeadline: '2025-05-10',
         hardDeadline: '2025-05-15'

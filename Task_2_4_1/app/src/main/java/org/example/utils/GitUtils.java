@@ -13,8 +13,14 @@ public class GitUtils {
         try {
             var processBuilder = new ProcessBuilder("git", "config", "--global", "user.name");
             var process = processBuilder.start();
-            var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String userName = reader.readLine();
+            String userName;
+            try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                userName = reader.readLine();
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Error reading Git global user.name: " + e.getMessage(), e);
+            }
+
 
             if (userName == null || userName.isEmpty()) {
                 throw new RuntimeException(
@@ -23,8 +29,13 @@ public class GitUtils {
 
             processBuilder = new ProcessBuilder("git", "config", "--global", "user.email");
             process = processBuilder.start();
-            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String userEmail = reader.readLine();
+            String userEmail;
+            try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                userEmail = reader.readLine();
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Error reading Git global user.email: " + e.getMessage(), e);
+            }
 
             if (userEmail == null || userEmail.isEmpty()) {
                 throw new RuntimeException(
